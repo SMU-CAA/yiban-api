@@ -1,36 +1,22 @@
 #!/usr/bin/env python3
+# coding=utf-8
 import re
+import json
 import requests as r
-from yblogin import getUserToken, BASEURL
-
-USERNAME = ''
-PASSWD = ''
+from yblogin import getUserToken, getInfo, BASEURL
 
 '''
-获取群组信息
+单用户使用
 '''
-def getInfo(USERTOKEN):
-
-    Get_Group_Info = r.get(BASEURL+'my/group/type/public', cookies=USERTOKEN)
-    group_id = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(1)
-    puid = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(2)
-    payload = {
-        'puid': puid,
-        'group_id': group_id
-    }
-    Get_Channel_Info = r.post(BASEURL+'forum/api/getListAjax', cookies=USERTOKEN, data=payload)
-    channel_id = Get_Channel_Info.json()['data']['channel_id']
-    info = {
-        'group_id': group_id,
-        'puid': puid,
-        'channel_id': channel_id
-    }
-    return info
-
-yiban_user_token = getUserToken(USERNAME, PASSWD)
+with open('config.json','r') as f:
+        config = json.loads(f.read())
+        
+USERNAME = config.get('username')
+PASSWD = config.get('password')
+yiban_user_token = config.get('cookie',getUserToken(USERNAME, PASSWD))
 token = dict(yiban_user_token=yiban_user_token)
 info = getInfo(token)
-group_id = info['group_id']
-puid = info['puid']
-channel_id = info['channel_id']
-actor_id = 13047896 # Public Account
+group_id = config.get('group_id',info['group_id'])
+puid = config.get('puid',info['puid'])
+channel_id = config.get('channel_id',info['channel_id'])
+actor_id = config.get('actor_id',13047896) # Public Account
