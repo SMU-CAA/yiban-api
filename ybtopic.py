@@ -24,13 +24,13 @@ class topic:
             'pubArea': self.group_id,
             'title': title,
             'content': content,
-            'isNotice': 'false',
+            'isNotice': False,
             'dom': '.js-submit'
         }
 
         Add_Topic = r.post(BASEURL + 'forum/article/addAjax',
                            cookies=self.token, data=payload)
-        return Add_Topic.json()['code']
+        return Add_Topic.json()['message']
 
     '''
     获取话题 <- 正则
@@ -72,7 +72,7 @@ class topic:
 
         Go_Topic = r.post(BASEURL + 'forum/reply/addAjax',
                           cookies=self.token, data=payload)
-        return Go_Topic.json()['code']
+        return Go_Topic.json()['message']
 
     '''
     点赞话题
@@ -88,4 +88,4 @@ class topic:
 
         Up_Topic = r.post(BASEURL + 'forum/article/upArticleAjax',
                           cookies=self.token, data=payload)
-        return Up_Topic.json()['code']
+        return Up_Topic.json()['message']

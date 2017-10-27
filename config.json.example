@@ -1,4 +1,9 @@
 {
-    "username0": "passwd0",
-    "username1": "passwd1"
+    "user": {
+        "username0": "passwd0",
+        "username1": "passwd1"
+    },
+    "configs": {
+        "cat": "g"
+    }
 }

@@ -12,6 +12,7 @@ BASEURL = 'https://www.yiban.cn/'
 模拟 JSEncrypt 加密
 加密方式为 PKCS1_v1_5
 '''
+
 def rsaEncrypt(password, key):
 
     cipher = PKCS1_v1_5.new(RSA.importKey(key))
@@ -21,6 +22,7 @@ def rsaEncrypt(password, key):
 易班登陆拿Token
 参数: USERNAME, PASSWD
 '''
+
 def getUserToken(user, passwd):
 
     LOGIN_PAGE = BASEURL+'login'
@@ -34,7 +36,7 @@ def getUserToken(user, passwd):
     data = {
         'account': user,
         'password': Password,
-        'captcha': '',
+        'captcha': None,
         'keysTime': KeysTime,
         'is_rember': 1
     }
@@ -48,6 +50,7 @@ def getUserToken(user, passwd):
 获取群组信息
 返回 JSON 字典
 '''
+
 def getInfo(token):
 
     Get_Group_Info = requests.get(BASEURL+'my/group/type/public', cookies=token)

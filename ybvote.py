@@ -26,7 +26,7 @@ class vote:
             'scope_ids': self.group_id,
             'title': title,
             'subjectTxt': subjectTxt,
-            'subjectPic': '',
+            'subjectPic': None,
             'options_num': 2,
             'scopeMin': 1,
             'scopeMax': 1,
@@ -46,7 +46,7 @@ class vote:
 
         Add_Vote = r.post(BASEURL + 'vote/vote/add',
                           cookies=self.token, data=payload)
-        return Add_Vote.json()['code']
+        return Add_Vote.json()['message']
 
     '''
     获取投票
@@ -127,7 +127,7 @@ class go:
 
         Go_Vote = r.post(BASEURL + 'vote/vote/act',
                          cookies=self.token, data=payload)  # Multiple Choice Vote
-        return Go_Vote.json()['code']
+        return Go_Vote.json()['message']
 
     '''
     评论投票
@@ -150,4 +150,4 @@ class go:
 
         Go_Vote_Reply = r.post(BASEURL + 'vote/vote/addComment',
                                cookies=self.token, data=payload)
-        return Go_Vote_Reply.json()['code']
+        return Go_Vote_Reply.json()['message']
