@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 # coding=utf-8
 import re
-import requests
-from urllib import parse
 from base64 import b64encode
-from Crypto.Cipher import PKCS1_v1_5
-from Crypto.PublicKey import RSA
+import requests
+from Cryptodome.Cipher import PKCS1_v1_5
+from Cryptodome.PublicKey import RSA
 
 BASEURL = 'https://www.yiban.cn/'
-
-r = requests.Session()
 
 '''
 模拟 JSEncrypt 加密
@@ -28,7 +25,7 @@ def getUserToken(user, passwd):
 
     LOGIN_PAGE = BASEURL+'login'
     LOGIN_URL = BASEURL+'login/doLoginAjax'
-
+    r = requests.Session()
     LoginPage = r.get(LOGIN_PAGE)
     RsaKey = re.search(r'data-keys=\'([\s\S]*?)\'',LoginPage.text).group(1)
     KeysTime = re.search(r'data-keys-time=\'(.*?)\'',LoginPage.text).group(1)
@@ -53,7 +50,7 @@ def getUserToken(user, passwd):
 '''
 def getInfo(USERTOKEN):
 
-    Get_Group_Info = r.get(BASEURL+'my/group/type/public', cookies=USERTOKEN)
+    Get_Group_Info = requests.get(BASEURL+'my/group/type/public', cookies=USERTOKEN)
     group_id = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(1)
     puid = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(2)
 
@@ -62,7 +59,7 @@ def getInfo(USERTOKEN):
         'group_id': group_id
     }
 
-    Get_Channel_Info = r.post(BASEURL+'forum/api/getListAjax', cookies=USERTOKEN, data=payload)
+    Get_Channel_Info = requests.post(BASEURL+'forum/api/getListAjax', cookies=USERTOKEN, data=payload)
     channel_id = Get_Channel_Info.json()['data']['channel_id']
 
     info = {

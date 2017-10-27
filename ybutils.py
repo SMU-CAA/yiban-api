@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 # coding=utf-8
-import re
 import json
-import requests as r
-from yblogin import getUserToken, getInfo, BASEURL
+from yblogin import getUserToken, getInfo
 
 '''
 单用户使用
 '''
 with open('config.json','r') as f:
-        config = json.loads(f.read())
+    config = json.loads(f.read())
         
 USERNAME = config.get('username')
 PASSWD = config.get('password')
