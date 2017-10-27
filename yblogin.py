@@ -40,17 +40,17 @@ def getUserToken(user, passwd):
     }
     
     LoginURL = r.post(LOGIN_URL, headers={'X-Requested-With': 'XMLHttpRequest'}, data=data)
-    USERTOKEN = LoginURL.cookies['yiban_user_token']  # -> KeyError Exception
+    token = LoginURL.cookies['yiban_user_token']  # -> KeyError Exception
     r.close()
-    return USERTOKEN
+    return token
 
 '''
 获取群组信息
 返回 JSON 字典
 '''
-def getInfo(USERTOKEN):
+def getInfo(token):
 
-    Get_Group_Info = requests.get(BASEURL+'my/group/type/public', cookies=USERTOKEN)
+    Get_Group_Info = requests.get(BASEURL+'my/group/type/public', cookies=token)
     group_id = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(1)
     puid = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(2)
 
@@ -59,7 +59,7 @@ def getInfo(USERTOKEN):
         'group_id': group_id
     }
 
-    Get_Channel_Info = requests.post(BASEURL+'forum/api/getListAjax', cookies=USERTOKEN, data=payload)
+    Get_Channel_Info = requests.post(BASEURL+'forum/api/getListAjax', cookies=token, data=payload)
     channel_id = Get_Channel_Info.json()['data']['channel_id']
 
     info = {

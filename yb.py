@@ -2,27 +2,13 @@
 # coding=utf-8
 import re
 import json
+import time
 import requests
 import ybvote
 import ybtopic
-from yblogin import BASEURL
-import time
+from yblogin import BASEURL, getUserToken, getInfo
 
 r = requests.Session()
-
-'''
-单用户调用示例
-获取 EPGA 数值信息
-'''
-from ybutils import token, group_id, puid, channel_id, actor_id
-def getEPGA(USERTOKEN):
-
-    Get_EPGA = r.get(BASEURL+'newgroup/indexPub/group_id/' +
-                     group_id + '/puid/' + puid, cookies=USERTOKEN)
-    EPGA = re.search(r'EGPA：[0-9\.]*', Get_EPGA.text)
-    return EPGA.group()
-
-print(getEPGA(token))
 
 '''
 获取一点字符 (Hitokoto API)
@@ -35,15 +21,15 @@ def getHitokoto():
     return Hitokoto + ' --' + From
 
 '''
-多用户调用示例
-multiuser.json 键值对应为 username: password
+config.json 存储键值对
+应为 'username': 'password'
 '''
-with open('multiuser.json','r') as f:
+with open('config.json','r') as f:
+
     config = json.loads(f.read())
 
 for user in config.keys():
 
-    from yblogin import getUserToken, getInfo
     USERNAME = user
     PASSWD = config.get(user)
     yiban_user_token = getUserToken(USERNAME, PASSWD)
@@ -54,22 +40,35 @@ for user in config.keys():
     channel_id = config.get('channel_id',info['channel_id'])
     actor_id = config.get('actor_id',13047896) # Public Account
 
+    '''
+    调用示例
+    获取 EPGA 数值信息
+    '''
+    def getEPGA(token):
+
+        Get_EPGA = r.get(BASEURL+'newgroup/indexPub/group_id/' +
+                        group_id + '/puid/' + puid, cookies=token)
+        EPGA = re.search(r'EGPA：[0-9\.]*', Get_EPGA.text)
+        return EPGA.group()
+
+    print(getEPGA(token))
+
     for i in range(1, 10):
 
-        print(ybtopic.topic(token).add('一言',getHitokoto()))
+        print(ybtopic.topic(token, puid, group_id, channel_id).add('一言',getHitokoto()))
         time.sleep(4)
 
     for i in range(1, 10):
 
-        print(ybvote.vote(token).add('一言',getHitokoto(),getHitokoto(),getHitokoto()))
+        print(ybvote.vote(token, puid, group_id).add('一言',getHitokoto(),getHitokoto(),getHitokoto()))
         time.sleep(4)
     
     for i in range(0, 10):
 
-        article_id = ybtopic.topic(token).get()['data']['list'][i]['id']
-        print(ybtopic.topic(token).up(article_id))
+        article_id = ybtopic.topic(token, puid, group_id, channel_id).get()['data']['list'][i]['id']
+        print(ybtopic.topic(token, puid, group_id, channel_id).up(article_id))
 
         for j in range(0, 3):
 
-            print(ybtopic.topic(token).go(article_id, getHitokoto()))
+            print(ybtopic.topic(token, puid, group_id, channel_id).go(article_id, getHitokoto()))
             time.sleep(4)
