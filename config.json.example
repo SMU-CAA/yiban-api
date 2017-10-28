@@ -4,6 +4,10 @@
         "username1": "passwd1"
     },
     "configs": {
-        "cat": "g"
+        "cat": "choose_from_abcbefg_via_http://hitokoto.cn/",
+        "vote_count": 3,
+        "topic_count": 3,
+        "reply_count": 12,
+        "add_reply_count": 8
     }
 }

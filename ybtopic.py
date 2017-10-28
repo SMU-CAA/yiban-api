@@ -24,7 +24,7 @@ class topic:
             'pubArea': self.group_id,
             'title': title,
             'content': content,
-            'isNotice': False,
+            'isNotice': 'false',
             'dom': '.js-submit'
         }
 

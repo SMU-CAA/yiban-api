@@ -46,10 +46,10 @@ for username in user.keys():
     puid = conf.get('puid', info['puid'])
     channel_id = conf.get('channel_id', info['channel_id'])
     actor_id = conf.get('actor_id', 13047896)  # Public Account
-    range_i = conf.get('vote_count', 10)
-    range_j = conf.get('topic_count', 10)
-    range_k = conf.get('reply_count', 10)
-    range_l = conf.get('add_reply_count', 6)
+    range_i = conf.get('vote_count', 2)
+    range_j = conf.get('topic_count', 2)
+    range_k = conf.get('reply_count', 2)
+    range_l = conf.get('add_reply_count', 8)
 
     '''
     调用示例
@@ -68,10 +68,10 @@ for username in user.keys():
     for i in range(1, range_i):
 
         try:
-            print(USERNAME + ': ' + ybvote.vote(token, puid, group_id).add('一言' + time.asctime(
-                time.localtime(time.time())), getHitokoto(cat), getHitokoto(cat), getHitokoto(cat)))
+            print(USERNAME + ': ' + ybvote.vote(token, puid, group_id).add('一言 ' + time.asctime(
+                time.localtime(time.time())), getHitokoto(cat), getHitokoto(cat), getHitokoto(cat)) + str(i))
         except:
-            print(USERNAME + ': 添加投票时未获取到的错误' + i)
+            print(USERNAME + ': 添加投票时未获取到的错误' + str(i))
         finally:
             time.sleep(3)
 
@@ -79,9 +79,9 @@ for username in user.keys():
 
         try:
             print(USERNAME + ': ' + ybtopic.topic(token, puid, group_id, channel_id).add(
-                '一言' + time.asctime(time.localtime(time.time())), getHitokoto(cat)))
+                '一言 ' + time.asctime(time.localtime(time.time())), getHitokoto(cat)) + str(j))
         except:
-            print(USERNAME + ': 添加话题时未获取到的错误' + j)
+            print(USERNAME + ': 添加话题时未获取到的错误' + str(j))
         finally:
             time.sleep(3)
 
@@ -94,13 +94,13 @@ for username in user.keys():
 
                 try:
                     print(USERNAME + ': ' + ybtopic.topic(token, puid,
-                        group_id, channel_id).go(article_id, getHitokoto(cat)))
+                        group_id, channel_id).go(article_id, getHitokoto(cat)) + str(l))
                 except:
-                    print(USERNAME + ': 添加评论时未获取到的错误' + l)
+                    print(USERNAME + ': 添加评论时未获取到的错误' + str(l))
                 finally:
                     time.sleep(3)
 
         except:
-            print(USERNAME + ': 获取评论列表时未获取到的错误' + k)
+            print(USERNAME + ': 获取评论列表时未获取到的错误' + str(k))
         finally:
             time.sleep(3)
