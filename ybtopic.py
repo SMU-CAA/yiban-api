@@ -36,18 +36,18 @@ class topic:
     获取话题 <- 正则
     '''
 
-    def get(self):
+    def get(self, size=0, Sections_id=-1, need_notice=0, my=0):
 
         payload = {
             'channel_id': self.channel_id,
             'puid': self.puid,
             'group_id': self.group_id,
             'page': 0,
-            'size': 0,
+            'size': size,
             'orderby': 'updateTime',
-            'Sections_id': -1,
-            'need_notice': 0,
-            'my': 0
+            'Sections_id': Sections_id,
+            'need_notice': need_notice,
+            'my': my
         }
 
         Get_Topic = r.post(BASEURL + 'forum/article/listAjax',
@@ -55,19 +55,38 @@ class topic:
         return Get_Topic.json()
 
     '''
+    获取评论
+    '''
+
+    def list(self, article_id, size=0):
+
+        payload = {
+            'channel_id': self.channel_id,
+            'puid': self.puid,
+            'article_id': article_id,
+            'page': 0,
+            'size': size,
+            'order': 1
+        }
+
+        Get_List = r.post(BASEURL + 'forum/reply/listAjax',
+                          cookies=self.token, data=payload)
+        return Get_List.json()
+
+    '''
     评论话题
     '''
 
-    def go(self, article_id, content):
+    def reply(self, article_id, content, reply_id=0, syncFeed=0, isAnonymous=0):
 
         payload = {
             'channel_id': self.channel_id,
             'puid': self.puid,
             'article_id': article_id,
             'content': content,
-            'reply_id': 0,
-            'syncFeed': 0,
-            'isAnonymous': 0
+            'reply_id': reply_id,
+            'syncFeed': syncFeed,
+            'isAnonymous': isAnonymous
         }
 
         Go_Topic = r.post(BASEURL + 'forum/reply/addAjax',
@@ -89,3 +108,36 @@ class topic:
         Up_Topic = r.post(BASEURL + 'forum/article/upArticleAjax',
                           cookies=self.token, data=payload)
         return Up_Topic.json()['message']
+
+    '''
+    删除评论
+    '''
+
+    def remove(self, article_id, reply_id):
+
+        payload = {
+            'channel_id': self.channel_id,
+            'puid': self.puid,
+            'article_id': article_id,
+            'reply_id': reply_id
+        }
+
+        Remove_Reply = r.post(BASEURL + 'forum/reply/removeAjax',
+                              cookies=self.token, data=payload)
+        return Remove_Reply.json()['message']
+
+    '''
+    删除话题
+    '''
+
+    def delete(self, article_id):
+
+        payload = {
+            'channel_id': self.channel_id,
+            'puid': self.puid,
+            'article_id_list': article_id,
+        }
+
+        Delete_Topic = r.post(BASEURL + 'forum/article/setDelAjax',
+                              cookies=self.token, data=payload)
+        return Delete_Topic.json()['message']

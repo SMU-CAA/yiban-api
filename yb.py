@@ -6,6 +6,7 @@ import time
 import requests
 import ybvote
 import ybtopic
+import ybfeed
 from yblogin import BASEURL, getUserToken, getInfo
 
 r = requests.Session()
@@ -13,6 +14,7 @@ r = requests.Session()
 '''
 获取一言字符 (Hitokoto API)
 '''
+
 
 def getHitokoto(cat):
 
@@ -25,7 +27,7 @@ def getHitokoto(cat):
 
 '''
 config.json 存储键值对
-应为 'username': 'password'
+user 应为 'username': 'password'
 '''
 
 with open('config.json', 'r') as f:
@@ -42,14 +44,19 @@ for username in user.keys():
     yiban_user_token = getUserToken(USERNAME, PASSWD)
     token = dict(yiban_user_token=yiban_user_token)
     info = getInfo(token)
+
     group_id = conf.get('group_id', info['group_id'])
     puid = conf.get('puid', info['puid'])
     channel_id = conf.get('channel_id', info['channel_id'])
-    actor_id = conf.get('actor_id', 13047896)  # Public Account
+    actor_id = conf.get('actor_id', info['actor_id'])
+    nick = info['nick']
+
     range_i = conf.get('vote_count', 2)
+    range_m = conf.get('vote_reply_count', 2)
+    range_n = conf.get('add_vote_reply_count', 6)
     range_j = conf.get('topic_count', 2)
-    range_k = conf.get('reply_count', 2)
-    range_l = conf.get('add_reply_count', 8)
+    range_k = conf.get('topic_reply_count', 2)
+    range_l = conf.get('add_topic_reply_count', 6)
 
     '''
     调用示例
@@ -65,42 +72,63 @@ for username in user.keys():
 
     print(getEPGA(token))
 
-    for i in range(1, range_i):
+    for i in range(0, range_i):
 
         try:
-            print(USERNAME + ': ' + ybvote.vote(token, puid, group_id).add('一言 ' + time.asctime(
-                time.localtime(time.time())), getHitokoto(cat), getHitokoto(cat), getHitokoto(cat)) + str(i))
+            print(nick + ': 添加投票 ' + ybvote.vote(token, puid, group_id).add('一言 ' + time.asctime(
+                time.localtime(time.time())), getHitokoto(cat), getHitokoto(cat), getHitokoto(cat)) + str(i + 1))
         except:
-            print(USERNAME + ': 添加投票时未获取到的错误' + str(i))
+            print(nick + ': 添加投票时未获取到的错误' + str(i + 1))
         finally:
             time.sleep(3)
 
-    for j in range(1, range_j):
+    for j in range(0, range_j):
 
         try:
-            print(USERNAME + ': ' + ybtopic.topic(token, puid, group_id, channel_id).add(
-                '一言 ' + time.asctime(time.localtime(time.time())), getHitokoto(cat)) + str(j))
+            print(nick + ': 添加话题 ' + ybtopic.topic(token, puid, group_id, channel_id).add(
+                '一言 ' + time.asctime(time.localtime(time.time())), getHitokoto(cat)) + str(j + 1))
         except:
-            print(USERNAME + ': 添加话题时未获取到的错误' + str(j))
+            print(nick + ': 添加话题时未获取到的错误' + str(j + 1))
+        finally:
+            time.sleep(3)
+
+    for m in range(0, range_m):
+
+        try:
+            vote_id = ybvote.vote(token, puid, group_id).get(
+                range_m)['data']['list'][m]['id']
+
+            for n in range(0, range_n):
+
+                try:
+                    print(nick + ': 添加投票评论 ' + ybvote.go(token, puid, group_id, actor_id,
+                                                         vote_id, 0, 0).reply(getHitokoto(cat), 0, 0) + str(n + 1))
+                except:
+                    print(nick + ': 添加投票评论时未获取到的错误' + str(n + 1))
+                finally:
+                    time.sleep(3)
+        except:
+            print(nick + ': 获取投票列表时未获取到的错误' + str(m + 1))
         finally:
             time.sleep(3)
 
     for k in range(0, range_k):
 
         try:
-            article_id = ybtopic.topic(token, puid, group_id, channel_id).get()['data']['list'][k]['id']
+            article_id = ybtopic.topic(token, puid, group_id, channel_id).get(range_k)[
+                'data']['list'][k]['id']
 
-            for l in range(1, range_l):
+            for l in range(0, range_l):
 
                 try:
-                    print(USERNAME + ': ' + ybtopic.topic(token, puid,
-                        group_id, channel_id).go(article_id, getHitokoto(cat)) + str(l))
+                    print(nick + ': 添加话题评论 ' + ybtopic.topic(token, puid,
+                                                             group_id, channel_id).reply(article_id, getHitokoto(cat)) + str(l + 1))
                 except:
-                    print(USERNAME + ': 添加评论时未获取到的错误' + str(l))
+                    print(nick + ': 添加话题评论时未获取到的错误' + str(l + 1))
                 finally:
                     time.sleep(3)
 
         except:
-            print(USERNAME + ': 获取评论列表时未获取到的错误' + str(k))
+            print(nick + ': 获取话题列表时未获取到的错误' + str(k + 1))
         finally:
             time.sleep(3)

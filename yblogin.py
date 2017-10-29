@@ -8,6 +8,11 @@ from Cryptodome.PublicKey import RSA
 
 BASEURL = 'https://www.yiban.cn/'
 
+header = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.18 Safari/537.36',
+    'X-Requested-With': 'XMLHttpRequest'
+}
+
 '''
 模拟 JSEncrypt 加密
 加密方式为 PKCS1_v1_5
@@ -41,7 +46,7 @@ def getUserToken(user, passwd):
         'is_rember': 1
     }
     
-    LoginURL = r.post(LOGIN_URL, headers={'X-Requested-With': 'XMLHttpRequest'}, data=data)
+    LoginURL = r.post(LOGIN_URL, headers=header, data=data)
     token = LoginURL.cookies['yiban_user_token']  # -> KeyError Exception
     r.close()
     return token
@@ -65,10 +70,16 @@ def getInfo(token):
     Get_Channel_Info = requests.post(BASEURL+'forum/api/getListAjax', cookies=token, data=payload)
     channel_id = Get_Channel_Info.json()['data']['channel_id']
 
+    Get_User_Info = requests.post(BASEURL+'ajax/my/getLogin', cookies=token)
+    actor_id = Get_User_Info.json()['data']['user']['id']
+    nick = Get_User_Info.json()['data']['user']['nick']
+
     info = {
         'group_id': group_id,
         'puid': puid,
-        'channel_id': channel_id
+        'channel_id': channel_id,
+        'actor_id': actor_id,
+        'nick': nick
     }
 
     return info
