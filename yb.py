@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # coding=utf-8
+import os
+import sys
 import re
 import json
 import time
 import requests
+import getopt
 import ybvote
 import ybtopic
 import ybfeed
@@ -29,13 +32,22 @@ def getHitokoto(cat):
 config.json 存储键值对
 user 应为 'username': 'password'
 '''
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "c:",["config"])
+    global f
+    for o, a in opts:
+        if o in ("-c", "--config"):
+            f = open(a, 'r')
+    else:
+        f = open(os.path.split(os.path.realpath(__file__))[0]+'/config.json', 'r')
+except getopt.GetoptError as err:
+    print(err)
+    sys.exit(2)
 
-with open('config.json', 'r') as f:
-
-    config = json.loads(f.read())
-    user = config['user']
-    conf = config['configs']
-    cat = conf.get('cat', 'b')
+config = json.loads(f.read())
+user = config['user']
+conf = config['configs']
+cat = conf.get('cat', 'b')
 
 for username in user.keys():
 
