@@ -5,11 +5,13 @@
     },
     "configs": {
         "cat": "choose_from_abcbefg_via_http://hitokoto.cn/",
-        "vote_count": 2,
-        "vote_reply_count": 3,
-        "add_vote_reply_count": 5,
-        "topic_count": 2,
-        "topic_reply_count": 3,
-        "add_topic_reply_count": 5
+        "add_vote_count": 2,
+        "vote_control_count": 5,
+        "vote_up": true,
+        "vote_reply_count": 1,
+        "add_topic_count": 2,
+        "topic_control_count": 5,
+        "topic_up": true,
+        "topic_reply_count": 1
     }
 }
