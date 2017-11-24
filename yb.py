@@ -150,9 +150,9 @@ for username in user.keys():
 
                     try:
                         print(nick + ': 添加投票评论 ' + ybvote.go(token, puid, group_id, actor_id,
-                                                             vote_id, 0, 0).reply(getHitokoto(cat), 0, 0) + str(j + 1))
+                                                             vote_id, 0, 0).reply(getHitokoto(cat), 0, 0) + fprint(j))
                     except:
-                        print(nick + ': 添加投票评论时未获取到的错误' + str(j + 1))
+                        print(nick + ': 添加投票评论时未获取到的错误' + fprint(j))
                     finally:
                         wait()
 
@@ -181,9 +181,9 @@ for username in user.keys():
 
                     try:
                         print(nick + ': 添加话题评论 ' + ybtopic.topic(token, puid,
-                                                                 group_id, channel_id).reply(article_id, getHitokoto(cat)) + str(j + 1))
+                                                                 group_id, channel_id).reply(article_id, getHitokoto(cat)) + fprint(j))
                     except:
-                        print(nick + ': 添加话题评论时未获取到的错误' + str(j + 1))
+                        print(nick + ': 添加话题评论时未获取到的错误' + fprint(j))
                     finally:
                         wait()
 
