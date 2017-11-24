@@ -110,6 +110,22 @@ class topic:
         return Up_Topic.json()['message']
 
     '''
+    取消点赞话题
+    '''
+
+    def down(self, article_id):
+
+        payload = {
+            'channel_id': self.channel_id,
+            'puid': self.puid,
+            'article_id': article_id
+        }
+
+        Down_Topic = r.post(BASEURL + 'forum/article/upDelArticleAjax',
+                            cookies=self.token, data=payload)
+        return Down_Topic.json()['message']
+
+    '''
     删除评论
     '''
 

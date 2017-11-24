@@ -36,6 +36,7 @@ class vote:
             'voteKey': 2,
             'public_type': public_type,
             'isAnonymous': isAnonymous,
+            "voteIsCaptcha": 0,
             'istop': istop,
             'sysnotice': sysnotice,
             'isshare': isshare,
@@ -54,16 +55,16 @@ class vote:
     返回 JSON 字典
     '''
 
-    def get(self, size):
+    def get(self, size=10, page=0, status=1, sort=1, time=0):
 
         payload = {
             'puid': self.puid,
             'group_id': self.group_id,
-            'page': 0,
+            'page': page,
             'size': size,
-            'status': 1,
-            'sort': 1,
-            'time': 0
+            'status': status,
+            'sort': sort,
+            'time': time
         }
 
         Get_Vote = r.post(BASEURL + 'vote/index/getVoteList',
@@ -116,19 +117,38 @@ class go:
     参与单选投票
     '''
 
-    def vote(self, choice=0):
+    def vote(self, auto=False, choice=0):
 
-        voptions_id = self.Get_Vote_Detail.json(
-        )['data']['option_list'][choice]['id']
+        if auto:
+            vote_data = self.Get_Vote_Detail.json()['data']
+            minimum = vote_data['vote_list']['minimum']
+            scopemax = vote_data['vote_list']['scopeMax']
+            voptions_id = []
 
-        payload = {
-            'puid': self.puid,
-            'group_id': self.group_id,
-            'vote_id': self.vote_id,
-            'voptions_id': voptions_id,
-            'minimum': 1,
-            'scopeMax': 1
-        }
+            for i in range(0, int(minimum)):
+                voptions_id.append(vote_data['option_list'][i]['id'])
+
+            payload = {
+                'puid': self.puid,
+                'group_id': self.group_id,
+                'vote_id': self.vote_id,
+                'voptions_id': ','.join(voptions_id),
+                'minimum': minimum,
+                'scopeMax': scopemax
+            }
+
+        else:
+            voptions_id = self.Get_Vote_Detail.json(
+            )['data']['option_list'][choice]['id']
+
+            payload = {
+                'puid': self.puid,
+                'group_id': self.group_id,
+                'vote_id': self.vote_id,
+                'voptions_id': voptions_id,
+                'minimum': 1,
+                'scopeMax': 1
+            }
 
         Go_Vote = r.post(BASEURL + 'vote/vote/act',
                          cookies=self.token, data=payload)
@@ -139,7 +159,7 @@ class go:
     参数: 正文
     '''
 
-    def remove(self, content, comment_id=0, user_id=0):
+    def reply(self, content, comment_id=0, user_id=0):
 
         payload = {
             'mountid': self.mount_id,
@@ -161,7 +181,7 @@ class go:
     删除评论
     '''
 
-    def reply(self, content, comment_id, user_id=0):
+    def remove(self, content, comment_id, user_id=0):
 
         payload = {
             'mountid': self.mount_id,
@@ -195,6 +215,24 @@ class go:
         Up_Vote = r.post(BASEURL + 'vote/vote/editLove',
                          cookies=self.token, data=payload)
         return Up_Vote.json()['message']
+
+    '''
+    点赞投票
+    '''
+
+    def down(self, flag=1):
+
+        payload = {
+            'group_id': self.group_id,
+            'puid': self.puid,
+            'vote_id': self.vote_id,
+            'actor_id': self.actor_id,
+            'flag': flag
+        }
+
+        Down_Vote = r.post(BASEURL + 'vote/vote/editLove',
+                           cookies=self.token, data=payload)
+        return Down_Vote.json()['message']
 
     '''
     删除投票

@@ -5,142 +5,194 @@ import sys
 import re
 import json
 import time
-import requests
 import getopt
+import random
+import requests
 import ybvote
 import ybtopic
-import ybfeed
+#import ybfeed
 from yblogin import BASEURL, getUserToken, getInfo
 
 r = requests.Session()
 
 '''
+调用示例
+获取 EPGA 数值信息
+'''
+
+def getEPGA(token):
+
+    Get_EPGA = r.get(BASEURL + 'newgroup/indexPub/group_id/' +
+                     group_id + '/puid/' + puid, cookies=token)
+    EPGA = re.search(r'EGPA：[0-9\.]*', Get_EPGA.text)
+    return EPGA.group()
+
+
+'''
 获取一言字符 (Hitokoto API)
 '''
 
-
-def getHitokoto(cat):
+def getHitokoto(CAT):
 
     Get_Hitokoto = r.get('https://sslapi.hitokoto.cn/',
-                         params={'c': cat, 'encode': 'json'})
+                         params={'c': CAT, 'encode': 'json'})
     Hitokoto = Get_Hitokoto.json()['hitokoto']
     From = Get_Hitokoto.json()['from']
     return Hitokoto + ' --' + From
+
+
+def wait():
+    return random.uniform(1, 3)
+
+
+def fprint(I):
+    return ' #' + str(I + 1)
 
 
 '''
 config.json 存储键值对
 user 应为 'username': 'password'
 '''
+
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "c:",["config"])
+    opts, args = getopt.getopt(sys.argv[1:], "c:", ["config"])
     global f
     for o, a in opts:
         if o in ("-c", "--config"):
             f = open(a, 'r')
     else:
-        f = open(os.path.split(os.path.realpath(__file__))[0]+'/config.json', 'r')
+        f = open(os.path.split(os.path.realpath(__file__))
+                 [0] + '/config.json', 'r')
 except getopt.GetoptError as err:
     print(err)
     sys.exit(2)
 
 config = json.loads(f.read())
+
 user = config['user']
 conf = config['configs']
 cat = conf.get('cat', 'b')
 
+add_vote_count = conf.get('add_vote_count', 2)
+
+vote_control_count = conf.get('vote_control_count', 5)
+vote_up = conf.get('vote_up', True)
+vote_reply_count = conf.get('vote_reply_count', 1)
+
+add_topic_count = conf.get('add_topic_count', 2)
+
+topic_control_count = conf.get('topic_control_count', 5)
+topic_up = conf.get('topic_up', True)
+topic_reply_count = conf.get('topic_reply_count', 1)
+
 for username in user.keys():
 
-    USERNAME = username
-    PASSWD = user.get(username)
-    yiban_user_token = getUserToken(USERNAME, PASSWD)
-    token = dict(yiban_user_token=yiban_user_token)
-    info = getInfo(token)
+    try:
+        USERNAME = username
+        PASSWD = user.get(username)
+        yiban_user_token = getUserToken(USERNAME, PASSWD)
+        token = dict(yiban_user_token=yiban_user_token)
+        info = getInfo(token)
 
-    group_id = conf.get('group_id', info['group_id'])
-    puid = conf.get('puid', info['puid'])
-    channel_id = conf.get('channel_id', info['channel_id'])
-    actor_id = conf.get('actor_id', info['actor_id'])
-    nick = info['nick']
+        group_id = conf.get('group_id', info['group_id'])
+        puid = conf.get('puid', info['puid'])
+        channel_id = conf.get('channel_id', info['channel_id'])
+        actor_id = conf.get('actor_id', info['actor_id'])
+        nick = info['nick']
 
-    range_i = conf.get('vote_count', 2)
-    range_m = conf.get('vote_reply_count', 2)
-    range_n = conf.get('add_vote_reply_count', 6)
-    range_j = conf.get('topic_count', 2)
-    range_k = conf.get('topic_reply_count', 2)
-    range_l = conf.get('add_topic_reply_count', 6)
+        print(getEPGA(token))
 
-    '''
-    调用示例
-    获取 EPGA 数值信息
-    '''
+        for i in range(0, add_vote_count):
 
-    def getEPGA(token):
+            try:
+                print(nick + ': 添加投票 ' + ybvote.vote(token, puid, group_id).add('一言 ' + time.asctime(
+                    time.localtime(time.time())), getHitokoto(cat), getHitokoto(cat), getHitokoto(cat)) + fprint(i))
+            except:
+                print(nick + ': 添加投票时未获取到的错误' + fprint(i))
+            finally:
+                wait()
 
-        Get_EPGA = r.get(BASEURL + 'newgroup/indexPub/group_id/' +
-                         group_id + '/puid/' + puid, cookies=token)
-        EPGA = re.search(r'EGPA：[0-9\.]*', Get_EPGA.text)
-        return EPGA.group()
+        for i in range(0, add_topic_count):
 
-    print(getEPGA(token))
+            try:
+                print(nick + ': 添加话题 ' + ybtopic.topic(token, puid, group_id, channel_id).add(
+                    '一言 ' + time.asctime(time.localtime(time.time())), getHitokoto(cat)) + fprint(i))
+            except:
+                print(nick + ': 添加话题时未获取到的错误' + fprint(i))
+            finally:
+                wait()
 
-    for i in range(0, range_i):
+        for i in range(0, vote_control_count):
 
-        try:
-            print(nick + ': 添加投票 ' + ybvote.vote(token, puid, group_id).add('一言 ' + time.asctime(
-                time.localtime(time.time())), getHitokoto(cat), getHitokoto(cat), getHitokoto(cat)) + str(i + 1))
-        except:
-            print(nick + ': 添加投票时未获取到的错误' + str(i + 1))
-        finally:
-            time.sleep(3)
-
-    for j in range(0, range_j):
-
-        try:
-            print(nick + ': 添加话题 ' + ybtopic.topic(token, puid, group_id, channel_id).add(
-                '一言 ' + time.asctime(time.localtime(time.time())), getHitokoto(cat)) + str(j + 1))
-        except:
-            print(nick + ': 添加话题时未获取到的错误' + str(j + 1))
-        finally:
-            time.sleep(3)
-
-    for m in range(0, range_m):
-
-        try:
-            vote_id = ybvote.vote(token, puid, group_id).get(
-                range_m)['data']['list'][m]['id']
-
-            for n in range(0, range_n):
+            try:
+                vote_id = ybvote.vote(token, puid, group_id).get(
+                    vote_control_count)['data']['list'][i]['id']
 
                 try:
-                    print(nick + ': 添加投票评论 ' + ybvote.go(token, puid, group_id, actor_id,
-                                                         vote_id, 0, 0).reply(getHitokoto(cat), 0, 0) + str(n + 1))
+                    print(nick + ': 参与投票 ' + str(ybvote.go(token, puid, group_id, actor_id,
+                                                           vote_id, 0, 0).vote(auto=True)) + fprint(i))
                 except:
-                    print(nick + ': 添加投票评论时未获取到的错误' + str(n + 1))
+                    print(nick + ': 参与投票时未获取到的错误' + fprint(i))
                 finally:
-                    time.sleep(3)
-        except:
-            print(nick + ': 获取投票列表时未获取到的错误' + str(m + 1))
-        finally:
-            time.sleep(3)
+                    wait()
 
-    for k in range(0, range_k):
+                if vote_up:
 
-        try:
-            article_id = ybtopic.topic(token, puid, group_id, channel_id).get(range_k)[
-                'data']['list'][k]['id']
+                    try:
+                        print(nick + ': 点赞投票 ' + ybvote.go(token, puid, group_id, actor_id,
+                                                           vote_id, 0, 0).up(1) + fprint(i))
+                    except:
+                        print(nick + ': 点赞投票时未获取到的错误' + fprint(i))
+                    finally:
+                        wait()
 
-            for l in range(0, range_l):
+                for j in range(0, vote_reply_count):
 
-                try:
-                    print(nick + ': 添加话题评论 ' + ybtopic.topic(token, puid,
-                                                             group_id, channel_id).reply(article_id, getHitokoto(cat)) + str(l + 1))
-                except:
-                    print(nick + ': 添加话题评论时未获取到的错误' + str(l + 1))
-                finally:
-                    time.sleep(3)
+                    try:
+                        print(nick + ': 添加投票评论 ' + ybvote.go(token, puid, group_id, actor_id,
+                                                             vote_id, 0, 0).reply(getHitokoto(cat), 0, 0) + str(j + 1))
+                    except:
+                        print(nick + ': 添加投票评论时未获取到的错误' + str(j + 1))
+                    finally:
+                        wait()
 
-        except:
-            print(nick + ': 获取话题列表时未获取到的错误' + str(k + 1))
-        finally:
-            time.sleep(3)
+            except:
+                print(nick + ': 获取投票列表时未获取到的错误' + fprint(i))
+            finally:
+                wait()
+
+        for i in range(0, topic_control_count):
+
+            try:
+                article_id = ybtopic.topic(token, puid, group_id, channel_id).get(topic_control_count)[
+                    'data']['list'][i]['id']
+
+                if topic_up:
+
+                    try:
+                        print(nick + ': 点赞话题 ' + ybtopic.topic(token, puid,
+                                                               group_id, channel_id).reply(article_id, getHitokoto(cat)) + fprint(i))
+                    except:
+                        print(nick + ': 点赞话题时未获取到的错误' + fprint(i))
+                    finally:
+                        wait()
+
+                for j in range(0, topic_reply_count):
+
+                    try:
+                        print(nick + ': 添加话题评论 ' + ybtopic.topic(token, puid,
+                                                                 group_id, channel_id).reply(article_id, getHitokoto(cat)) + str(j + 1))
+                    except:
+                        print(nick + ': 添加话题评论时未获取到的错误' + str(j + 1))
+                    finally:
+                        wait()
+
+            except:
+                print(nick + ': 获取话题列表时未获取到的错误' + fprint(i))
+            finally:
+                wait()
+
+    except:
+        print(USERNAME + ': 无法连接服务器或密码错误')
+    finally:
+        wait()
