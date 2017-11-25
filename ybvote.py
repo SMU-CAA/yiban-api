@@ -202,14 +202,14 @@ class go:
     点赞投票
     '''
 
-    def up(self, flag=1):
+    def up(self):
 
         payload = {
             'group_id': self.group_id,
             'puid': self.puid,
             'vote_id': self.vote_id,
             'actor_id': self.actor_id,
-            'flag': flag
+            'flag': 1
         }
 
         Up_Vote = r.post(BASEURL + 'vote/vote/editLove',
@@ -217,17 +217,17 @@ class go:
         return Up_Vote.json()['message']
 
     '''
-    点赞投票
+    取消点赞投票
     '''
 
-    def down(self, flag=1):
+    def down(self):
 
         payload = {
             'group_id': self.group_id,
             'puid': self.puid,
             'vote_id': self.vote_id,
             'actor_id': self.actor_id,
-            'flag': flag
+            'flag': 0
         }
 
         Down_Vote = r.post(BASEURL + 'vote/vote/editLove',

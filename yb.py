@@ -42,7 +42,7 @@ def getHitokoto(CAT):
 
 
 def wait():
-    return random.uniform(1, 3)
+    return time.sleep(random.uniform(1, 3))
 
 
 def fprint(I):
@@ -76,6 +76,7 @@ cat = conf.get('cat', 'b')
 add_vote_count = conf.get('add_vote_count', 2)
 
 vote_control_count = conf.get('vote_control_count', 5)
+vote = conf.get('vote', True)
 vote_up = conf.get('vote_up', True)
 vote_reply_count = conf.get('vote_reply_count', 1)
 
@@ -128,19 +129,21 @@ for username in user.keys():
                 vote_id = ybvote.vote(token, puid, group_id).get(
                     vote_control_count)['data']['list'][i]['id']
 
-                try:
-                    print(nick + ': 参与投票 ' + str(ybvote.go(token, puid, group_id, actor_id,
-                                                           vote_id, 0, 0).vote(auto=True)) + fprint(i))
-                except:
-                    print(nick + ': 参与投票时未获取到的错误' + fprint(i))
-                finally:
-                    wait()
+                if vote:
+
+                    try:
+                        print(nick + ': 参与投票 ' + str(ybvote.go(token, puid, group_id, actor_id,
+                                                               vote_id, 0, 0).vote(auto=True)) + fprint(i))
+                    except:
+                        print(nick + ': 参与投票时未获取到的错误' + fprint(i))
+                    finally:
+                        wait()
 
                 if vote_up:
 
                     try:
                         print(nick + ': 点赞投票 ' + ybvote.go(token, puid, group_id, actor_id,
-                                                           vote_id, 0, 0).up(1) + fprint(i))
+                                                           vote_id, 0, 0).up() + fprint(i))
                     except:
                         print(nick + ': 点赞投票时未获取到的错误' + fprint(i))
                     finally:
@@ -171,7 +174,7 @@ for username in user.keys():
 
                     try:
                         print(nick + ': 点赞话题 ' + ybtopic.topic(token, puid,
-                                                               group_id, channel_id).reply(article_id, getHitokoto(cat)) + fprint(i))
+                                                               group_id, channel_id).up(article_id) + fprint(i))
                     except:
                         print(nick + ': 点赞话题时未获取到的错误' + fprint(i))
                     finally:
