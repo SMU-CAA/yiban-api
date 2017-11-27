@@ -23,7 +23,7 @@ r = requests.Session()
 def getEPGA(token):
 
     Get_EPGA = r.get(BASEURL + 'newgroup/indexPub/group_id/' +
-                     group_id + '/puid/' + puid, cookies=token)
+                     group_id + '/puid/' + puid, cookies=token, timeout=10)
     EPGA = re.search(r'EGPA：[0-9\.]*', Get_EPGA.text)
     return EPGA.group()
 
@@ -35,7 +35,7 @@ def getEPGA(token):
 def getHitokoto(CAT):
 
     Get_Hitokoto = r.get('https://sslapi.hitokoto.cn/',
-                         params={'c': CAT, 'encode': 'json'})
+                         params={'c': CAT, 'encode': 'json'}, timeout=10)
     Hitokoto = Get_Hitokoto.json()['hitokoto']
     From = Get_Hitokoto.json()['from']
     return Hitokoto + ' --' + From

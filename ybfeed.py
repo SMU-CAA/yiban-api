@@ -23,7 +23,7 @@ class feed:
         }
 
         Add_Feed = r.post(BASEURL + 'feed/add',
-                          cookies=self.token, data=payload)
+                          cookies=self.token, data=payload, timeout=10)
         return Add_Feed.json()['message']
 
     '''
@@ -39,7 +39,7 @@ class feed:
         }
 
         Get_Feed = r.post(BASEURL + 'feed/list',
-                          cookies=self.token, data=payload)
+                          cookies=self.token, data=payload, timeout=10)
         return Get_Feed.json()
 
     '''
@@ -52,7 +52,7 @@ class feed:
             'id': feed_id
         }
 
-        UP_Feed = r.post(BASEURL + 'feed/up', cookies=self.token, data=payload)
+        UP_Feed = r.post(BASEURL + 'feed/up', cookies=self.token, data=payload, timeout=10)
         return UP_Feed.json()['message']
 
     '''
@@ -66,7 +66,7 @@ class feed:
         }
 
         Down_Feed = r.post(BASEURL + 'feed/down',
-                           cookies=self.token, data=payload)
+                           cookies=self.token, data=payload, timeout=10)
         return Down_Feed.json()['message']
 
     def delete(self, feed_id):
@@ -76,5 +76,5 @@ class feed:
         }
 
         Delete_Feed = r.post(BASEURL + 'feed/delete',
-                             cookies=self.token, data=payload)
+                             cookies=self.token, data=payload, timeout=10)
         return Delete_Feed.json()['message']

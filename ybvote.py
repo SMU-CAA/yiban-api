@@ -47,7 +47,7 @@ class vote:
         }
 
         Add_Vote = r.post(BASEURL + 'vote/vote/add',
-                          cookies=self.token, data=payload)
+                          cookies=self.token, data=payload, timeout=10)
         return Add_Vote.json()['message']
 
     '''
@@ -68,7 +68,7 @@ class vote:
         }
 
         Get_Vote = r.post(BASEURL + 'vote/index/getVoteList',
-                          cookies=self.token, data=payload)
+                          cookies=self.token, data=payload, timeout=10)
         return Get_Vote.json()
 
 
@@ -89,7 +89,7 @@ class go:
         self.isOrganization = isOrganization
         self.ispublic = ispublic
         self.Get_Token = r.get(BASEURL + 'vote/vote/showDetail/vote_id/' + str(
-            vote_id) + '/puid/' + self.puid + '/group_id/' + self.group_id, cookies=self.token)
+            vote_id) + '/puid/' + self.puid + '/group_id/' + self.group_id, cookies=self.token, timeout=10)
         self.vote_token = re.search(
             r'g_config.token = "(.*)"', self.Get_Token.text).group(1)
 
@@ -108,7 +108,7 @@ class go:
         }
 
         self.Get_Vote_Detail = r.post(
-            BASEURL + 'vote/vote/getVoteDetail', cookies=self.token, data=payload)
+            BASEURL + 'vote/vote/getVoteDetail', cookies=self.token, data=payload, timeout=10)
 
         self.mount_id = self.Get_Vote_Detail.json(
         )['data']['vote_list']['Mount_id']
@@ -151,7 +151,7 @@ class go:
             }
 
         Go_Vote = r.post(BASEURL + 'vote/vote/act',
-                         cookies=self.token, data=payload)
+                         cookies=self.token, data=payload, timeout=10)
         return Go_Vote.json()['message']
 
     '''
@@ -174,7 +174,7 @@ class go:
         }
 
         Go_Vote_Reply = r.post(BASEURL + 'vote/vote/addComment',
-                               cookies=self.token, data=payload)
+                               cookies=self.token, data=payload, timeout=10)
         return Go_Vote_Reply.json()['message']
 
     '''
@@ -195,7 +195,7 @@ class go:
         }
 
         Del_Vote_Reply = r.post(BASEURL + 'vote/vote/addComment',
-                                cookies=self.token, data=payload)
+                                cookies=self.token, data=payload, timeout=10)
         return Del_Vote_Reply.json()['message']
 
     '''
@@ -213,7 +213,7 @@ class go:
         }
 
         Up_Vote = r.post(BASEURL + 'vote/vote/editLove',
-                         cookies=self.token, data=payload)
+                         cookies=self.token, data=payload, timeout=10)
         return Up_Vote.json()['message']
 
     '''
@@ -231,7 +231,7 @@ class go:
         }
 
         Down_Vote = r.post(BASEURL + 'vote/vote/editLove',
-                           cookies=self.token, data=payload)
+                           cookies=self.token, data=payload, timeout=10)
         return Down_Vote.json()['message']
 
     '''
@@ -247,5 +247,5 @@ class go:
         }
 
         Delete_Vote = r.post(BASEURL + 'vote/Expand/delVote',
-                             cookies=self.token, data=payload)
+                             cookies=self.token, data=payload, timeout=10)
         return Delete_Vote.json()['message']

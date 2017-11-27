@@ -33,7 +33,7 @@ def getUserToken(user, passwd):
     LOGIN_PAGE = BASEURL+'login'
     LOGIN_URL = BASEURL+'login/doLoginAjax'
     r = requests.Session()
-    LoginPage = r.get(LOGIN_PAGE)
+    LoginPage = r.get(LOGIN_PAGE, timeout=10)
     RsaKey = re.search(r'data-keys=\'([\s\S]*?)\'',LoginPage.text).group(1)
     KeysTime = re.search(r'data-keys-time=\'(.*?)\'',LoginPage.text).group(1)
     Password = rsaEncrypt(passwd, RsaKey)
@@ -46,7 +46,7 @@ def getUserToken(user, passwd):
         'is_rember': 1
     }
     
-    LoginURL = r.post(LOGIN_URL, headers=header, data=data)
+    LoginURL = r.post(LOGIN_URL, headers=header, data=data, timeout=10)
     token = LoginURL.cookies['yiban_user_token']  # -> KeyError Exception
     r.close()
     return token
@@ -58,7 +58,7 @@ def getUserToken(user, passwd):
 
 def getInfo(token):
 
-    Get_Group_Info = requests.get(BASEURL+'my/group/type/public', cookies=token)
+    Get_Group_Info = requests.get(BASEURL+'my/group/type/public', cookies=token, timeout=10)
     group_id = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(1)
     puid = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(2)
 
@@ -67,10 +67,10 @@ def getInfo(token):
         'group_id': group_id
     }
 
-    Get_Channel_Info = requests.post(BASEURL+'forum/api/getListAjax', cookies=token, data=payload)
+    Get_Channel_Info = requests.post(BASEURL+'forum/api/getListAjax', cookies=token, data=payload, timeout=10)
     channel_id = Get_Channel_Info.json()['data']['channel_id']
 
-    Get_User_Info = requests.post(BASEURL+'ajax/my/getLogin', cookies=token)
+    Get_User_Info = requests.post(BASEURL+'ajax/my/getLogin', cookies=token, timeout=10)
     actor_id = Get_User_Info.json()['data']['user']['id']
     nick = Get_User_Info.json()['data']['user']['nick']
 

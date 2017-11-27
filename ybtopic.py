@@ -29,7 +29,7 @@ class topic:
         }
 
         Add_Topic = r.post(BASEURL + 'forum/article/addAjax',
-                           cookies=self.token, data=payload)
+                           cookies=self.token, data=payload, timeout=10)
         return Add_Topic.json()['message']
 
     '''
@@ -51,7 +51,7 @@ class topic:
         }
 
         Get_Topic = r.post(BASEURL + 'forum/article/listAjax',
-                           cookies=self.token, data=payload)
+                           cookies=self.token, data=payload, timeout=10)
         return Get_Topic.json()
 
     '''
@@ -70,7 +70,7 @@ class topic:
         }
 
         Get_List = r.post(BASEURL + 'forum/reply/listAjax',
-                          cookies=self.token, data=payload)
+                          cookies=self.token, data=payload, timeout=10)
         return Get_List.json()
 
     '''
@@ -90,7 +90,7 @@ class topic:
         }
 
         Go_Topic = r.post(BASEURL + 'forum/reply/addAjax',
-                          cookies=self.token, data=payload)
+                          cookies=self.token, data=payload, timeout=10)
         return Go_Topic.json()['message']
 
     '''
@@ -106,7 +106,7 @@ class topic:
         }
 
         Up_Topic = r.post(BASEURL + 'forum/article/upArticleAjax',
-                          cookies=self.token, data=payload)
+                          cookies=self.token, data=payload, timeout=10)
         return Up_Topic.json()['message']
 
     '''
@@ -122,7 +122,7 @@ class topic:
         }
 
         Down_Topic = r.post(BASEURL + 'forum/article/upDelArticleAjax',
-                            cookies=self.token, data=payload)
+                            cookies=self.token, data=payload, timeout=10)
         return Down_Topic.json()['message']
 
     '''
@@ -139,7 +139,7 @@ class topic:
         }
 
         Remove_Reply = r.post(BASEURL + 'forum/reply/removeAjax',
-                              cookies=self.token, data=payload)
+                              cookies=self.token, data=payload, timeout=10)
         return Remove_Reply.json()['message']
 
     '''
@@ -155,5 +155,5 @@ class topic:
         }
 
         Delete_Topic = r.post(BASEURL + 'forum/article/setDelAjax',
-                              cookies=self.token, data=payload)
+                              cookies=self.token, data=payload, timeout=10)
         return Delete_Topic.json()['message']
