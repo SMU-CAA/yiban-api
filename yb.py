@@ -40,7 +40,6 @@ def getHitokoto(CAT):
     From = Get_Hitokoto.json()['from']
     return Hitokoto + ' --' + From
 
-
 def wait():
     return time.sleep(random.uniform(1, 3))
 
@@ -106,8 +105,7 @@ for username in user.keys():
         for i in range(0, add_vote_count):
 
             try:
-                print(nick + ': 添加投票 ' + ybvote.vote(token, puid, group_id).add('一言 ' + time.asctime(
-                    time.localtime(time.time())), getHitokoto(cat), getHitokoto(cat), getHitokoto(cat)) + fprint(i))
+                print(nick + ': 添加投票 ' + ybvote.vote(token, puid, group_id).add(getHitokoto(cat), getHitokoto(cat), getHitokoto(cat), getHitokoto(cat)) + fprint(i))
             except:
                 print(nick + ': 添加投票时未获取到的错误' + fprint(i))
             finally:
@@ -117,7 +115,7 @@ for username in user.keys():
 
             try:
                 print(nick + ': 添加话题 ' + ybtopic.topic(token, puid, group_id, channel_id).add(
-                    '一言 ' + time.asctime(time.localtime(time.time())), getHitokoto(cat)) + fprint(i))
+                    getHitokoto(cat), getHitokoto(cat)) + fprint(i))
             except:
                 print(nick + ': 添加话题时未获取到的错误' + fprint(i))
             finally:
