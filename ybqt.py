@@ -305,8 +305,11 @@ class MyThread(QtCore.QThread):
             self.epgasig.emit("无法连接服务器")
 
     def runVote(self):
-        self.prog = 50 / (int(self.add_vote_count) + int(self.vote_control_count)
+        try:
+            self.prog = 50 / (int(self.add_vote_count) + int(self.vote_control_count)
                           * (self.vote / 2 + self.vote / 2 + self.vote_reply / 2 * int(self.vote_reply_count)))
+        except:
+            self.prog = 0
         for i in range(0, int(self.add_vote_count)):
             try:
                 response = ybvote.vote(
@@ -388,8 +391,11 @@ class MyThread(QtCore.QThread):
                 self.wait()
 
     def runTopic(self):
-        self.prog = 50 / (int(self.add_topic_count) + int(self.topic_control_count) * (
-            self.topic_up / 2 + self.topic_reply / 2 * int(self.topic_reply_count)))
+        try:
+            self.prog = 50 / (int(self.add_topic_count) + int(self.topic_control_count) * (
+                self.topic_up / 2 + self.topic_reply / 2 * int(self.topic_reply_count)))
+        except:
+            self.prog = 0
         for i in range(0, int(self.add_topic_count)):
             try:
                 response = ybtopic.topic(
@@ -502,7 +508,6 @@ class MyWindow(QtWidgets.QMainWindow, Ui_mainWindow):
             self.doubleSpinBox.setValue(self.settings.value("double", 0.0000, type=float))
         else:
             self.QsettingHook()
-        r = requests.Session()
 
     def DisableButton(self):
         self.plainTextEdit.clear()
@@ -525,6 +530,7 @@ class MyWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.comboBox.setDisabled(True)
         self.doubleSpinBox.setDisabled(True)
         self.progressBar.setValue(0)
+        self.QsettingHook()
         self.mythread = MyThread(
             self.settings.value("username", type=str),
             self.settings.value("password", type=str),
@@ -548,7 +554,6 @@ class MyWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.mythread.stopsig.connect(self.StopThread)
         self.mythread.finished.connect(self.EnableButton)
         self.mythread.start()
-        self.QsettingHook()
         self.lauchButton.released.disconnect()
         self.lauchButton.released.connect(self.StopThread)
         self.lauchButton.setEnabled(True)
@@ -612,7 +617,7 @@ class MyWindow(QtWidgets.QMainWindow, Ui_mainWindow):
 
     def closeEvent(self, ev):
         self.QsettingHook()
-        quit()
+        ev.accept()
 
 if __name__ == "__main__":
     import os
@@ -626,6 +631,7 @@ if __name__ == "__main__":
     import ybvote
     import ybtopic
     from yblogin import BASEURL, getUserToken, getInfo
+    r = requests.Session()
     app = QtWidgets.QApplication(sys.argv)
     widget = MyWindow()
     widget.show()
