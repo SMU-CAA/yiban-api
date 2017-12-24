@@ -1,7 +1,7 @@
 __pycache__/
 .vscode/
-config.json
-multiuser.json
+*.json
 *.spec
+*.ini
 build/
 dist/
