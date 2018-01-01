@@ -1,0 +1,1 @@
+python -OO -m PyInstaller -Fw .\ybqt.py --runtime-tmpdir C:\Temp

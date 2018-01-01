@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'MainWindow - untitled.ui'
@@ -290,7 +291,7 @@ class MyThread(QtCore.QThread):
             self.sig.emit(self.fprint("登陆成功", dlevel=1))
             return 0
         except:
-            self.sig.emit(self.fprint("无法连接服务器或密码错误", dlevel=3))
+            self.sig.emit(self.fprint("无法连接服务器或密码错误，先试试在 www.yiban.cn 登录一下吧！", dlevel=3))
             return 2
         finally:
             self.wait()
@@ -322,7 +323,7 @@ class MyThread(QtCore.QThread):
                     self.getHitokoto(),
                     self.getHitokoto()
                 )
-                self.sig.emit(self.fprint("添加投票 " + response, dlevel=1, num=i))
+                self.sig.emit(self.fprint("添加投票" + response, dlevel=1, num=i))
             except:
                 self.sig.emit(self.fprint("添加投票时未获取到的错误", dlevel=2, num=i))
             finally:
@@ -352,7 +353,7 @@ class MyThread(QtCore.QThread):
                     try:
                         response = votego.vote(auto=True)
                         self.sig.emit(self.fprint(
-                            "参与投票 " + response, dlevel=1, num=i))
+                            "参与投票" + response, dlevel=1, num=i))
                     except:
                         self.sig.emit(self.fprint(
                             "参与投票时未获取到的错误", dlevel=2, num=i))
@@ -364,7 +365,7 @@ class MyThread(QtCore.QThread):
                     try:
                         response = votego.up()
                         self.sig.emit(self.fprint(
-                            "点赞投票 " + response, dlevel=1, num=i))
+                            "点赞投票" + response, dlevel=1, num=i))
                     except:
                         self.sig.emit(self.fprint(
                             "点赞投票时未获取到的错误", dlevel=2, num=i))
@@ -377,7 +378,7 @@ class MyThread(QtCore.QThread):
                         try:
                             response = votego.reply(self.getHitokoto())
                             self.sig.emit(self.fprint(
-                                "添加投票评论 " + response, dlevel=1, num=i))
+                                "添加投票评论" + response, dlevel=1, num=i))
                         except:
                             self.sig.emit(self.fprint(
                                 "添加投票评论时未获取到的错误", dlevel=2, num=i))
@@ -407,7 +408,7 @@ class MyThread(QtCore.QThread):
                     self.getHitokoto(),
                     self.getHitokoto()
                 )
-                self.sig.emit(self.fprint("添加话题 " + response, dlevel=1, num=i))
+                self.sig.emit(self.fprint("添加话题" + response, dlevel=1, num=i))
             except:
                 self.sig.emit(self.fprint("添加话题时未获取到的错误", dlevel=2, num=i))
             finally:
@@ -428,7 +429,7 @@ class MyThread(QtCore.QThread):
                     try:
                         response = topicgo.up(self.article_id)
                         self.sig.emit(self.fprint(
-                            "点赞话题 " + response, dlevel=1, num=i))
+                            "点赞话题" + response, dlevel=1, num=i))
                     except:
                         self.sig.emit(self.fprint(
                             "点赞话题时未获取到的错误", dlevel=2, num=i))
@@ -442,7 +443,7 @@ class MyThread(QtCore.QThread):
                             response = topicgo.reply(
                                 self.article_id, self.getHitokoto())
                             self.sig.emit(self.fprint(
-                                "添加话题评论 " + response, dlevel=1, num=i))
+                                "添加话题评论" + response, dlevel=1, num=i))
                         except:
                             self.sig.emit(self.fprint(
                                 "添加话题评论时未获取到的错误", dlevel=2, num=i))
@@ -483,6 +484,9 @@ class MyWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         QtCore.QCoreApplication.setApplicationName("ybqt")
         self.settings = QtCore.QSettings(os.getcwd() + "/ybqt.ini", QtCore.QSettings.IniFormat)
         self.settings.setFallbacksEnabled(False)
+        self.plainTextEdit.appendPlainText("Made by Simon Shi")
+        self.plainTextEdit.appendPlainText("在左侧填账号密码，点击启动即可刷EGPA。")
+        self.plainTextEdit.appendPlainText("如提示登陆失败，请先在 www.yiban.cn 登陆一次后重试。")
         if os.path.exists(os.getcwd() + "/ybqt.ini"):
             self.resize(self.settings.value('size', QtCore.QSize(501, 501)))
             self.move(self.settings.value('pos', QtCore.QPoint(0, 0)))

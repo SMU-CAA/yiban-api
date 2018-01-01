@@ -194,6 +194,6 @@ for username in user.keys():
                 wait()
 
     except:
-        print(USERNAME + ': 无法连接服务器或密码错误')
+        print(USERNAME + ': 无法连接服务器或密码错误，请先在 www.yiban.cn 登陆一次后重试。')
     finally:
         wait()
