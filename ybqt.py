@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'MainWindow - untitled.ui'
@@ -322,7 +323,7 @@ class MyThread(QtCore.QThread):
                     self.getHitokoto(),
                     self.getHitokoto()
                 )
-                self.sig.emit(self.fprint("添加投票 " + response, dlevel=1, num=i))
+                self.sig.emit(self.fprint("添加投票" + response, dlevel=1, num=i))
             except:
                 self.sig.emit(self.fprint("添加投票时未获取到的错误", dlevel=2, num=i))
             finally:
@@ -352,7 +353,7 @@ class MyThread(QtCore.QThread):
                     try:
                         response = votego.vote(auto=True)
                         self.sig.emit(self.fprint(
-                            "参与投票 " + response, dlevel=1, num=i))
+                            "参与投票" + response, dlevel=1, num=i))
                     except:
                         self.sig.emit(self.fprint(
                             "参与投票时未获取到的错误", dlevel=2, num=i))
@@ -364,7 +365,7 @@ class MyThread(QtCore.QThread):
                     try:
                         response = votego.up()
                         self.sig.emit(self.fprint(
-                            "点赞投票 " + response, dlevel=1, num=i))
+                            "点赞投票" + response, dlevel=1, num=i))
                     except:
                         self.sig.emit(self.fprint(
                             "点赞投票时未获取到的错误", dlevel=2, num=i))
@@ -377,7 +378,7 @@ class MyThread(QtCore.QThread):
                         try:
                             response = votego.reply(self.getHitokoto())
                             self.sig.emit(self.fprint(
-                                "添加投票评论 " + response, dlevel=1, num=i))
+                                "添加投票评论" + response, dlevel=1, num=i))
                         except:
                             self.sig.emit(self.fprint(
                                 "添加投票评论时未获取到的错误", dlevel=2, num=i))
@@ -407,7 +408,7 @@ class MyThread(QtCore.QThread):
                     self.getHitokoto(),
                     self.getHitokoto()
                 )
-                self.sig.emit(self.fprint("添加话题 " + response, dlevel=1, num=i))
+                self.sig.emit(self.fprint("添加话题" + response, dlevel=1, num=i))
             except:
                 self.sig.emit(self.fprint("添加话题时未获取到的错误", dlevel=2, num=i))
             finally:
@@ -428,7 +429,7 @@ class MyThread(QtCore.QThread):
                     try:
                         response = topicgo.up(self.article_id)
                         self.sig.emit(self.fprint(
-                            "点赞话题 " + response, dlevel=1, num=i))
+                            "点赞话题" + response, dlevel=1, num=i))
                     except:
                         self.sig.emit(self.fprint(
                             "点赞话题时未获取到的错误", dlevel=2, num=i))
@@ -442,7 +443,7 @@ class MyThread(QtCore.QThread):
                             response = topicgo.reply(
                                 self.article_id, self.getHitokoto())
                             self.sig.emit(self.fprint(
-                                "添加话题评论 " + response, dlevel=1, num=i))
+                                "添加话题评论" + response, dlevel=1, num=i))
                         except:
                             self.sig.emit(self.fprint(
                                 "添加话题评论时未获取到的错误", dlevel=2, num=i))
