@@ -219,7 +219,7 @@ class Ui_mainWindow(object):
 
 class MyThread(QtCore.QThread):
 
-    def __init__(self, username, password, add_vote_count, vote_control_count, vote_reply_count, add_topic_count, topic_control_count, topic_reply_count, vote, vote_up, vote_reply, topic_up, topic_reply, cat, waitime):
+    def __init__(self, username, password, captcha, add_vote_count, vote_control_count, vote_reply_count, add_topic_count, topic_control_count, topic_reply_count, vote, vote_up, vote_reply, topic_up, topic_reply, cat, waitime):
         super(MyThread, self).__init__()
         self.username = username
         self.password = password
@@ -246,7 +246,7 @@ class MyThread(QtCore.QThread):
             4: "e",
             5: "f",
             6: "g",
-            7: "all",
+            7: "",
         }
         Get_Hitokoto = r.get("https://sslapi.hitokoto.cn/",
                              params={"c": cato.get(self.cat), "encode": "json"}, timeout=10)
@@ -275,11 +275,46 @@ class MyThread(QtCore.QThread):
             number = ""
         return dbglevel.get(dlevel) + string + number
 
+    def getUserToken(self, user, passwd, captcha=None):
+        LOGIN_PAGE = BASEURL+'login'
+        LOGIN_URL = BASEURL+'login/doLoginAjax'
+        LoginPage = r.get(LOGIN_PAGE, timeout=10)
+        RsaKey = re.search(r'data-keys=\'([\s\S]*?)\'',LoginPage.text).group(1)
+        KeysTime = re.search(r'data-keys-time=\'(.*?)\'',LoginPage.text).group(1)
+        Password = rsaEncrypt(passwd, RsaKey)
+        Captcha = LoginPage.get(BASEURL+'captcha/index?'+KeysTime[:-3]) #<-- Captch Image
+
+        ##Design a img place
+        ##And send emit to show it
+
+
+        ##Or get it once App open
+
+        data = {
+            'account': user,
+            'password': Password,
+            'captcha': captcha,
+            'keysTime': KeysTime,
+            'is_rember': 1
+        }
+
+        header = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.18 Safari/537.36',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+
+        LoginURL = r.post(LOGIN_URL, headers=header, data=data, timeout=10)
+        try:
+            token = LoginURL.cookies['yiban_user_token']  # -> KeyError Exception
+        except:
+            self.getUserToken(self.username, self.password)
+        return token
+
     def login(self):
         try:
             self.sig.emit("账号: " + self.username)
             self.sig.emit("密码: " + self.password)
-            yiban_user_token = getUserToken(self.username, self.password)
+            yiban_user_token = self.getUserToken(self.username, self.password)
             self.sig.emit("易班 Token: " + yiban_user_token)
             self.token = dict(yiban_user_token=yiban_user_token)
             self.info = getInfo(self.token)
@@ -291,7 +326,7 @@ class MyThread(QtCore.QThread):
             self.sig.emit(self.fprint("登陆成功", dlevel=1))
             return 0
         except:
-            self.sig.emit(self.fprint("无法连接服务器或密码错误", dlevel=3))
+            self.sig.emit(self.fprint("无法连接服务器或密码错误，先试试在 www.yiban.cn 登录一下吧！" + traceback.format_exc(), dlevel=3))
             return 2
         finally:
             self.wait()
@@ -325,7 +360,7 @@ class MyThread(QtCore.QThread):
                 )
                 self.sig.emit(self.fprint("添加投票" + response, dlevel=1, num=i))
             except:
-                self.sig.emit(self.fprint("添加投票时未获取到的错误", dlevel=2, num=i))
+                self.sig.emit(self.fprint("添加投票时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
             finally:
                 self.pro = self.pro + self.prog
                 self.prosig.emit(self.pro)
@@ -356,7 +391,7 @@ class MyThread(QtCore.QThread):
                             "参与投票" + response, dlevel=1, num=i))
                     except:
                         self.sig.emit(self.fprint(
-                            "参与投票时未获取到的错误", dlevel=2, num=i))
+                            "参与投票时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                     finally:
                         self.pro = self.pro + self.prog
                         self.prosig.emit(self.pro)
@@ -368,7 +403,7 @@ class MyThread(QtCore.QThread):
                             "点赞投票" + response, dlevel=1, num=i))
                     except:
                         self.sig.emit(self.fprint(
-                            "点赞投票时未获取到的错误", dlevel=2, num=i))
+                            "点赞投票时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                     finally:
                         self.pro = self.pro + self.prog
                         self.prosig.emit(self.pro)
@@ -381,13 +416,13 @@ class MyThread(QtCore.QThread):
                                 "添加投票评论" + response, dlevel=1, num=i))
                         except:
                             self.sig.emit(self.fprint(
-                                "添加投票评论时未获取到的错误", dlevel=2, num=i))
+                                "添加投票评论时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                         finally:
                             self.pro = self.pro + self.prog
                             self.prosig.emit(self.pro)
                             self.wait()
             except:
-                self.sig.emit(self.fprint("获取投票列表时未获取到的错误", dlevel=2, num=i))
+                self.sig.emit(self.fprint("获取投票列表时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
             finally:
                 self.wait()
 
@@ -410,7 +445,7 @@ class MyThread(QtCore.QThread):
                 )
                 self.sig.emit(self.fprint("添加话题" + response, dlevel=1, num=i))
             except:
-                self.sig.emit(self.fprint("添加话题时未获取到的错误", dlevel=2, num=i))
+                self.sig.emit(self.fprint("添加话题时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
             finally:
                 self.pro = self.pro + self.prog
                 self.prosig.emit(self.pro)
@@ -432,7 +467,7 @@ class MyThread(QtCore.QThread):
                             "点赞话题" + response, dlevel=1, num=i))
                     except:
                         self.sig.emit(self.fprint(
-                            "点赞话题时未获取到的错误", dlevel=2, num=i))
+                            "点赞话题时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                     finally:
                         self.pro = self.pro + self.prog
                         self.prosig.emit(self.pro)
@@ -446,13 +481,13 @@ class MyThread(QtCore.QThread):
                                 "添加话题评论" + response, dlevel=1, num=i))
                         except:
                             self.sig.emit(self.fprint(
-                                "添加话题评论时未获取到的错误", dlevel=2, num=i))
+                                "添加话题评论时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                         finally:
                             self.pro = self.pro + self.prog
                             self.prosig.emit(self.pro)
                             self.wait()
             except:
-                self.sig.emit(self.fprint("获取话题列表时未获取到的错误", dlevel=2, num=i))
+                self.sig.emit(self.fprint("获取话题列表时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
             finally:
                 self.wait()
 
@@ -484,6 +519,9 @@ class MyWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         QtCore.QCoreApplication.setApplicationName("ybqt")
         self.settings = QtCore.QSettings(os.getcwd() + "/ybqt.ini", QtCore.QSettings.IniFormat)
         self.settings.setFallbacksEnabled(False)
+        self.plainTextEdit.appendPlainText("Made by Simon Shi")
+        self.plainTextEdit.appendPlainText("在左侧填账号密码，点击启动即可刷EGPA。")
+        self.plainTextEdit.appendPlainText("如提示登陆失败，请先在 www.yiban.cn 登陆一次后重试。")
         if os.path.exists(os.getcwd() + "/ybqt.ini"):
             self.resize(self.settings.value('size', QtCore.QSize(501, 501)))
             self.move(self.settings.value('pos', QtCore.QPoint(0, 0)))
@@ -535,6 +573,7 @@ class MyWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.mythread = MyThread(
             self.settings.value("username", type=str),
             self.settings.value("password", type=str),
+            self.settings.value("captcha", type=str),
             self.settings.value("add_vote_count", 0, type=int),
             self.settings.value("vote_control_count", 0, type=int),
             self.settings.value("vote_reply_count", 0, type=int),
@@ -629,9 +668,10 @@ if __name__ == "__main__":
     import getopt
     import random
     import requests
+    import traceback
     import ybvote
     import ybtopic
-    from yblogin import BASEURL, getUserToken, getInfo
+    from yblogin import BASEURL, rsaEncrypt, getInfo
     r = requests.Session()
     app = QtWidgets.QApplication(sys.argv)
     widget = MyWindow()

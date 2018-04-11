@@ -8,6 +8,7 @@ import time
 import getopt
 import random
 import requests
+import traceback
 import ybvote
 import ybtopic
 #import ybfeed
@@ -91,6 +92,9 @@ for username in user.keys():
         USERNAME = username
         PASSWD = user.get(username)
         yiban_user_token = getUserToken(USERNAME, PASSWD)
+        if yiban_user_token == "711":
+            print(USERNAME + ': 需要输入验证码。', traceback.format_exc())
+            break
         token = dict(yiban_user_token=yiban_user_token)
         info = getInfo(token)
 
@@ -107,7 +111,7 @@ for username in user.keys():
             try:
                 print(nick + ': 添加投票 ' + ybvote.vote(token, puid, group_id).add(getHitokoto(cat), getHitokoto(cat), getHitokoto(cat), getHitokoto(cat)) + fprint(i))
             except:
-                print(nick + ': 添加投票时未获取到的错误' + fprint(i))
+                print(nick + ': 添加投票时未获取到的错误' + fprint(i), traceback.format_exc())
             finally:
                 wait()
 
@@ -117,7 +121,7 @@ for username in user.keys():
                 print(nick + ': 添加话题 ' + ybtopic.topic(token, puid, group_id, channel_id).add(
                     getHitokoto(cat), getHitokoto(cat)) + fprint(i))
             except:
-                print(nick + ': 添加话题时未获取到的错误' + fprint(i))
+                print(nick + ': 添加话题时未获取到的错误' + fprint(i), traceback.format_exc())
             finally:
                 wait()
 
@@ -133,7 +137,7 @@ for username in user.keys():
                         print(nick + ': 参与投票 ' + str(ybvote.go(token, puid, group_id, actor_id,
                                                                vote_id, 0, 0).vote(auto=True)) + fprint(i))
                     except:
-                        print(nick + ': 参与投票时未获取到的错误' + fprint(i))
+                        print(nick + ': 参与投票时未获取到的错误' + fprint(i), traceback.format_exc())
                     finally:
                         wait()
 
@@ -143,7 +147,7 @@ for username in user.keys():
                         print(nick + ': 点赞投票 ' + ybvote.go(token, puid, group_id, actor_id,
                                                            vote_id, 0, 0).up() + fprint(i))
                     except:
-                        print(nick + ': 点赞投票时未获取到的错误' + fprint(i))
+                        print(nick + ': 点赞投票时未获取到的错误' + fprint(i), traceback.format_exc())
                     finally:
                         wait()
 
@@ -153,12 +157,12 @@ for username in user.keys():
                         print(nick + ': 添加投票评论 ' + ybvote.go(token, puid, group_id, actor_id,
                                                              vote_id, 0, 0).reply(getHitokoto(cat), 0, 0) + fprint(j))
                     except:
-                        print(nick + ': 添加投票评论时未获取到的错误' + fprint(j))
+                        print(nick + ': 添加投票评论时未获取到的错误' + fprint(j), traceback.format_exc())
                     finally:
                         wait()
 
             except:
-                print(nick + ': 获取投票列表时未获取到的错误' + fprint(i))
+                print(nick + ': 获取投票列表时未获取到的错误' + fprint(i), traceback.format_exc())
             finally:
                 wait()
 
@@ -174,7 +178,7 @@ for username in user.keys():
                         print(nick + ': 点赞话题 ' + ybtopic.topic(token, puid,
                                                                group_id, channel_id).up(article_id) + fprint(i))
                     except:
-                        print(nick + ': 点赞话题时未获取到的错误' + fprint(i))
+                        print(nick + ': 点赞话题时未获取到的错误' + fprint(i), traceback.format_exc())
                     finally:
                         wait()
 
@@ -184,16 +188,16 @@ for username in user.keys():
                         print(nick + ': 添加话题评论 ' + ybtopic.topic(token, puid,
                                                                  group_id, channel_id).reply(article_id, getHitokoto(cat)) + fprint(j))
                     except:
-                        print(nick + ': 添加话题评论时未获取到的错误' + fprint(j))
+                        print(nick + ': 添加话题评论时未获取到的错误' + fprint(j), traceback.format_exc())
                     finally:
                         wait()
 
             except:
-                print(nick + ': 获取话题列表时未获取到的错误' + fprint(i))
+                print(nick + ': 获取话题列表时未获取到的错误' + fprint(i), traceback.format_exc())
             finally:
                 wait()
 
     except:
-        print(USERNAME + ': 无法连接服务器或密码错误')
+        print(USERNAME + ': 无法连接服务器或密码错误，请先在 www.yiban.cn 登陆一次后重试。', traceback.format_exc())
     finally:
         wait()

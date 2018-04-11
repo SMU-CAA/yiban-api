@@ -28,7 +28,7 @@ def rsaEncrypt(password, key):
 参数: USERNAME, PASSWD
 '''
 
-def getUserToken(user, passwd):
+def getUserToken(user, passwd, captcha=None):
 
     LOGIN_PAGE = BASEURL+'login'
     LOGIN_URL = BASEURL+'login/doLoginAjax'
@@ -41,13 +41,16 @@ def getUserToken(user, passwd):
     data = {
         'account': user,
         'password': Password,
-        'captcha': None,
+        'captcha': captcha,
         'keysTime': KeysTime,
         'is_rember': 1
     }
     
     LoginURL = r.post(LOGIN_URL, headers=header, data=data, timeout=10)
-    token = LoginURL.cookies['yiban_user_token']  # -> KeyError Exception
+    try:
+        token = LoginURL.cookies['yiban_user_token']  # -> KeyError Exception
+    except:
+        token = LoginURL.json()['code']
     r.close()
     return token
 

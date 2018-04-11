@@ -4,7 +4,7 @@
         "username1": "passwd1"
     },
     "configs": {
-        "cat": "choose_from_abcbefg_via_http://hitokoto.cn/",
+        "cat": "",
         "add_vote_count": 2,
         "vote_control_count": 5,
         "vote_up": true,
