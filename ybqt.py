@@ -282,7 +282,7 @@ class MyThread(QtCore.QThread):
         RsaKey = re.search(r'data-keys=\'([\s\S]*?)\'',LoginPage.text).group(1)
         KeysTime = re.search(r'data-keys-time=\'(.*?)\'',LoginPage.text).group(1)
         Password = rsaEncrypt(passwd, RsaKey)
-        Captcha = LoginPage.get(BASEURL+'captcha/index?'+KeysTime[:-3]) #<-- Captch Image
+        Captcha = r.get(BASEURL+'captcha/index?'+KeysTime[:-3]) #<-- Captch Image
 
         ##Design a img place
         ##And send emit to show it
