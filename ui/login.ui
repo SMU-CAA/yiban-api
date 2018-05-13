@@ -22,6 +22,9 @@
         <string>https://www.yiban.cn/</string>
        </url>
       </property>
+      <property name="zoomFactor">
+       <double>1.500000000000000</double>
+      </property>
      </widget>
     </item>
    </layout>

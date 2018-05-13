@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>501</width>
-    <height>425</height>
+    <height>523</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -71,6 +71,9 @@
           <property name="statusTip">
            <string>发起投票数量，如不需要请改为0关闭自动发起投票</string>
           </property>
+          <property name="maximum">
+           <number>9999</number>
+          </property>
           <property name="value">
            <number>1</number>
           </property>
@@ -94,6 +97,9 @@
           <property name="statusTip">
            <string>操作控制投票帖子数量，如不需要请改为0关闭操作控制投票帖子</string>
           </property>
+          <property name="maximum">
+           <number>9999</number>
+          </property>
           <property name="value">
            <number>2</number>
           </property>
@@ -116,6 +122,9 @@
          <widget class="QSpinBox" name="vote_reply_countSpinbox">
           <property name="statusTip">
            <string>回复投票次数，如不需要请改为0关闭回复投票</string>
+          </property>
+          <property name="maximum">
+           <number>9999</number>
           </property>
           <property name="value">
            <number>1</number>
@@ -220,6 +229,9 @@
           <property name="statusTip">
            <string>发起话题数量，如不需要请改为0关闭自动发起话题</string>
           </property>
+          <property name="maximum">
+           <number>9999</number>
+          </property>
           <property name="value">
            <number>1</number>
           </property>
@@ -243,6 +255,9 @@
           <property name="statusTip">
            <string>操作控制话题帖子数量，如不需要请改为0关闭操作控制话题帖子</string>
           </property>
+          <property name="maximum">
+           <number>9999</number>
+          </property>
           <property name="value">
            <number>2</number>
           </property>
@@ -252,6 +267,9 @@
          <widget class="QSpinBox" name="topic_reply_countSpinbox">
           <property name="statusTip">
            <string>回复话题次数，如不需要请改为0关闭回复话题</string>
+          </property>
+          <property name="maximum">
+           <number>9999</number>
           </property>
           <property name="value">
            <number>1</number>
@@ -284,7 +302,13 @@
     </item>
     <item row="0" column="0">
      <layout class="QFormLayout" name="formLayout_4">
-      <item row="0" column="0">
+      <property name="horizontalSpacing">
+       <number>4</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>4</number>
+      </property>
+      <item row="1" column="0">
        <widget class="QLabel" name="tokenLabel">
         <property name="toolTip">
          <string/>
@@ -300,7 +324,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="1" column="1">
        <widget class="QLineEdit" name="tokenLineedit">
         <property name="statusTip">
          <string>Token是易班账号密码验证的优秀替代方式，可用于访问易班服务，重新登录将重置Token</string>
@@ -310,7 +334,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="catLabel">
         <property name="toolTip">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;可以选择文本内容，使用了 https://hitokoto.cn/ 的服务&lt;/p&gt;&lt;table border=&quot;0&quot;style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot;cellspacing=&quot;0&quot;cellpadding=&quot;0&quot;&gt;&lt;td rowspan=&quot;9&quot;/&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;p&gt;提交不同的参数代表不同的类别，具体：&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;a&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Anime-动画&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;b&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Comic–漫画&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;c&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Game–游戏&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;d&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Novel–小说&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;e&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Myself–原创&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;f&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Internet–来自网络&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;g&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Other–其他&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;其他不存在参数&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;任意类型随机取得&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -326,16 +350,16 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="1">
        <widget class="QComboBox" name="comboBox">
         <property name="statusTip">
          <string>可以选择文本内容，使用了 https://hitokoto.cn/ 的服务</string>
         </property>
         <property name="currentText">
-         <string>All - 随机</string>
+         <string>Anime - 动画</string>
         </property>
         <property name="currentIndex">
-         <number>7</number>
+         <number>0</number>
         </property>
         <item>
          <property name="text">
@@ -377,9 +401,14 @@
           <string>All - 随机</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>自定义</string>
+         </property>
+        </item>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="waitLabel">
         <property name="toolTip">
          <string/>
@@ -392,22 +421,32 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="doubleSpinBox">
         <property name="statusTip">
          <string>每个操作之间的间隔，填入浮点数</string>
         </property>
         <property name="decimals">
-         <number>4</number>
+         <number>2</number>
         </property>
         <property name="minimum">
-         <double>1.000000000000000</double>
+         <double>0.100000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>9999.989999999999782</double>
         </property>
         <property name="singleStep">
-         <double>0.200000000000000</double>
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>3.600000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QPushButton" name="loginButton">
+        <property name="text">
+         <string>账号/密码登录</string>
         </property>
        </widget>
       </item>
@@ -418,10 +457,13 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QPushButton" name="loginButton">
-        <property name="text">
-         <string>账号/密码登录</string>
+      <item row="5" column="0" colspan="2">
+       <widget class="QPlainTextEdit" name="NotePad">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
        </widget>
       </item>

@@ -18,6 +18,7 @@ class Ui_LoginWindow(object):
         self.gridLayout.setObjectName("gridLayout")
         self.webEngineView = QtWebEngineWidgets.QWebEngineView(self.centralwidget)
         self.webEngineView.setUrl(QtCore.QUrl("https://www.yiban.cn/"))
+        self.webEngineView.setZoomFactor(1.5)
         self.webEngineView.setObjectName("webEngineView")
         self.gridLayout.addWidget(self.webEngineView, 0, 0, 1, 1)
         LoginWindow.setCentralWidget(self.centralwidget)

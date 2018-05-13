@@ -52,6 +52,10 @@ class MyThread(QtCore.QThread):
         From = Get_Hitokoto.json()["from"]
         return Hitokoto + " --" + From
 
+    def getElse(self, url=None):
+        Get_Url = r.get(url, timeout=10)
+        return str(Get_Url.text)
+
     def wait(self):
         try:
             self.getEPGA()
@@ -107,15 +111,16 @@ class MyThread(QtCore.QThread):
             self.prog = 0
         for i in range(0, int(self.add_vote_count)):
             try:
+                text = self.getHitokoto()
                 response = ybvote.vote(
                     self.token,
                     self.puid,
                     self.group_id
                 ).add(
-                    self.getHitokoto(),
-                    self.getHitokoto(),
-                    self.getHitokoto(),
-                    self.getHitokoto()
+                    text,
+                    text,
+                    text,
+                    text
                 )
                 self.sig.emit(self.fprint("添加投票" + response, dlevel=1, num=i))
             except:
@@ -303,6 +308,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
                 self.topic_replyCheckbox.setChecked(False)
             self.comboBox.setCurrentIndex(self.settings.value("combo", 0, type=int))
             self.doubleSpinBox.setValue(self.settings.value("double", 0.0000, type=float))
+            self.NotePad.setPlainText(self.settings.value("note", type=str))
         else:
             self.QsettingHook()
 
@@ -394,6 +400,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.settings.setValue("topic_reply", self.topic_replyCheckbox.checkState())
         self.settings.setValue("combo", self.comboBox.currentIndex())
         self.settings.setValue("double", self.doubleSpinBox.text())
+        self.settings.setValue("note", self.NotePad.toPlainText())
         self.settings.sync()
 
     def StopThread(self):
@@ -421,7 +428,7 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_LoginWindow):
     def __init__(self):
         super(LoginWindow, self).__init__()
         self.setupUi(self)
-        profile = QtWebEngineWidgets.QWebEngineProfile("storage", self.webEngineView)
+        profile = QtWebEngineWidgets.QWebEngineProfile(self.webEngineView)
         webpage = QtWebEngineWidgets.QWebEnginePage(profile, self.webEngineView)
         self.webEngineView.setPage(webpage)
         self.cookie_store = profile.cookieStore()
