@@ -46,7 +46,7 @@ class MyThread(QtCore.QThread):
             6: "g",
             7: "",
         }
-        Get_Hitokoto = r.get("https://sslapi.hitokoto.cn/",
+        Get_Hitokoto = r.get("https://v1.hitokoto.cn/",
                              params={"c": cato.get(self.cat), "encode": "json"}, timeout=10)
         Hitokoto = Get_Hitokoto.json()["hitokoto"]
         From = Get_Hitokoto.json()["from"]
