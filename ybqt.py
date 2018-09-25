@@ -185,6 +185,8 @@ class MyThread(QtCore.QThread):
                             self.pro = self.pro + self.prog
                             self.prosig.emit(self.pro)
                             self.wait()
+            except IndexError:
+                self.sig.emit(self.fprint("投票互动数量数量超过投票总数", dlevel=2, num=i))
             except:
                 self.sig.emit(self.fprint("获取投票列表时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
             finally:
@@ -250,6 +252,8 @@ class MyThread(QtCore.QThread):
                             self.pro = self.pro + self.prog
                             self.prosig.emit(self.pro)
                             self.wait()
+            except IndexError:
+                self.sig.emit(self.fprint("话题互动数量数量超过话题总数", dlevel=2, num=i))
             except:
                 self.sig.emit(self.fprint("获取话题列表时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
             finally:
