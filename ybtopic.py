@@ -38,7 +38,7 @@ class topic:
 
     def get(self, size=0, page=0, Sections_id=-1, need_notice=0, my=0):
         tmp = []
-        for i in range(1, size//10 + 1): # Extend json list to control size
+        for i in range(1, (size//10) + 2): # Extend json list to control size
             payload = {
                 'channel_id': self.channel_id,
                 'puid': self.puid,
