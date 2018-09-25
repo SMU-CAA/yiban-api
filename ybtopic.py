@@ -36,23 +36,25 @@ class topic:
     获取话题 <- 正则
     '''
 
-    def get(self, size=0, Sections_id=-1, need_notice=0, my=0):
+    def get(self, size=0, page=0, Sections_id=-1, need_notice=0, my=0):
+        tmp = []
+        for i in range(1, size//10 + 1): # Extend json list to control size
+            payload = {
+                'channel_id': self.channel_id,
+                'puid': self.puid,
+                'group_id': self.group_id,
+                'page': i, # Should be 0 originally, work as disable page parse
+                'size': 10, # Stick to 10 by stupid dev working yiban
+                'orderby': 'updateTime',
+                'Sections_id': Sections_id,
+                'need_notice': need_notice,
+                'my': my
+            }
 
-        payload = {
-            'channel_id': self.channel_id,
-            'puid': self.puid,
-            'group_id': self.group_id,
-            'page': 0,
-            'size': size,
-            'orderby': 'updateTime',
-            'Sections_id': Sections_id,
-            'need_notice': need_notice,
-            'my': my
-        }
-
-        Get_Topic = r.post(BASEURL + 'forum/article/listAjax',
-                           cookies=self.token, data=payload, timeout=10)
-        return Get_Topic.json()
+            Get_Topic = r.post(BASEURL + 'forum/article/listAjax',
+                            cookies=self.token, data=payload, timeout=10)
+            tmp.extend(Get_Topic.json()["data"]["list"])
+        return tmp # Return larger list, the overflowing lists could be droped by function.
 
     '''
     获取评论

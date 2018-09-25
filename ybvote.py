@@ -69,7 +69,7 @@ class vote:
 
         Get_Vote = r.post(BASEURL + 'vote/index/getVoteList',
                           cookies=self.token, data=payload, timeout=10)
-        return Get_Vote.json()
+        return Get_Vote.json()["data"]["list"]
 
 
 class go:

@@ -129,16 +129,17 @@ class MyThread(QtCore.QThread):
                 self.pro = self.pro + self.prog
                 self.prosig.emit(self.pro)
                 self.wait()
-
+        voteget = []
         for i in range(0, int(self.vote_control_count)):
             try:
-                self.vote_id = ybvote.vote(
+                votevote = ybvote.vote(
                     self.token,
                     self.puid,
                     self.group_id
-                ).get(
-                    self.vote_control_count
-                )["data"]["list"][i]["id"]
+                )
+                if not voteget:
+                    voteget = votevote.get(self.vote_control_count)
+                self.vote_id = voteget[i]["id"]
                 votego = ybvote.go(
                     self.token,
                     self.puid,
@@ -216,6 +217,7 @@ class MyThread(QtCore.QThread):
                 self.pro = self.pro + self.prog
                 self.prosig.emit(self.pro)
                 self.wait()
+        topicget = []
         for i in range(0, int(self.topic_control_count)):
             try:
                 topicgo = ybtopic.topic(
@@ -224,8 +226,9 @@ class MyThread(QtCore.QThread):
                     self.group_id,
                     self.channel_id
                 )
-                self.article_id = topicgo.get(self.topic_control_count)[
-                    "data"]["list"][i]["id"]
+                if not topicget:
+                    topicget = topicgo.get(size=self.topic_control_count)
+                self.article_id = topicget[i]["id"]
                 if self.topic_up:
                     try:
                         response = topicgo.up(self.article_id)
