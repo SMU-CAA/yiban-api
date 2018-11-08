@@ -427,6 +427,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
 
     def closeEvent(self, ev):
         self.QsettingHook()
+        loginw.close()
         ev.accept()
 
     def showLogin(self):
@@ -456,7 +457,7 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_LoginWindow):
         if 'yiban_user_token' in self.cookies:
             mainw.tokenLineedit.setText(loginw.cookies['yiban_user_token'])
             self.resetWebview()
-            loginw.hide()
+            loginw.close()
 
     def closeEvent(self, ev):
         self.resetWebview()
