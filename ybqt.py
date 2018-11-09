@@ -428,6 +428,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
     def closeEvent(self, ev):
         self.QsettingHook()
         loginw.close()
+        loginw.deleteLater()
         ev.accept()
 
     def showLogin(self):
@@ -445,19 +446,19 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_LoginWindow):
         self.cookie_store.cookieAdded.connect(self.onCookieAdded)
         self.cookies = dict()
         self.resetWebview()
+        self.webEngineView.load(QtCore.QUrl("https://www.yiban.cn/login"))
 
     def resetWebview(self):
         self.cookie_store.deleteAllCookies()
         self.cookies.clear()
-        self.webEngineView.load(QtCore.QUrl("https://www.yiban.cn/login"))
 
     def onCookieAdded(self, cookie):
         data = {bytearray(QtNetwork.QNetworkCookie(cookie).name()).decode(): bytearray(QtNetwork.QNetworkCookie(cookie).value()).decode()}
         self.cookies.update(data)
         if 'yiban_user_token' in self.cookies:
-            mainw.tokenLineedit.setText(loginw.cookies['yiban_user_token'])
+            mainw.tokenLineedit.setText(self.cookies['yiban_user_token'])
             self.resetWebview()
-            loginw.close()
+            self.close()
 
     def closeEvent(self, ev):
         self.resetWebview()
