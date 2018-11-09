@@ -1,1 +1,1 @@
-python -OO -m PyInstaller -Fw .\ybqt.py --runtime-tmpdir C:\Temp
+python -OO -m PyInstaller -Fw .\ybqt.py --icon=misc/icon.ico --clean --noconfirm --uac-uiaccess
