@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'ui/main.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
@@ -26,7 +28,6 @@ class Ui_mainWindow(object):
         self.plainTextEdit.setSizePolicy(sizePolicy)
         self.plainTextEdit.setToolTip("")
         self.plainTextEdit.setReadOnly(True)
-        self.plainTextEdit.setPlainText("")
         self.plainTextEdit.setCenterOnScroll(False)
         self.plainTextEdit.setObjectName("plainTextEdit")
         self.gridLayout_3.addWidget(self.plainTextEdit, 0, 1, 1, 1)
@@ -144,22 +145,11 @@ class Ui_mainWindow(object):
         self.tokenLineedit.setText("")
         self.tokenLineedit.setObjectName("tokenLineedit")
         self.formLayout_4.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.tokenLineedit)
-        self.catLabel = QtWidgets.QLabel(self.centralwidget)
-        self.catLabel.setWhatsThis("")
-        self.catLabel.setObjectName("catLabel")
-        self.formLayout_4.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.catLabel)
-        self.comboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.formLayout_4.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.comboBox)
+        self.urlLabel = QtWidgets.QLabel(self.centralwidget)
+        self.urlLabel.setToolTip("")
+        self.urlLabel.setWhatsThis("")
+        self.urlLabel.setObjectName("urlLabel")
+        self.formLayout_4.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.urlLabel)
         self.waitLabel = QtWidgets.QLabel(self.centralwidget)
         self.waitLabel.setToolTip("")
         self.waitLabel.setObjectName("waitLabel")
@@ -186,6 +176,9 @@ class Ui_mainWindow(object):
         self.NotePad.setSizePolicy(sizePolicy)
         self.NotePad.setObjectName("NotePad")
         self.formLayout_4.setWidget(5, QtWidgets.QFormLayout.SpanningRole, self.NotePad)
+        self.urlLineedit = QtWidgets.QLineEdit(self.centralwidget)
+        self.urlLineedit.setObjectName("urlLineedit")
+        self.formLayout_4.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.urlLineedit)
         self.gridLayout_3.addLayout(self.formLayout_4, 0, 0, 1, 1)
         mainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
@@ -193,13 +186,14 @@ class Ui_mainWindow(object):
         mainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(mainWindow)
-        self.comboBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
         mainWindow.setWindowTitle(_translate("mainWindow", "易班 EGPA"))
         self.plainTextEdit.setStatusTip(_translate("mainWindow", "程序输出日志，如出错请咨询开发者"))
+        self.plainTextEdit.setPlainText(_translate("mainWindow", "Made by Simon Shi\n"
+"在左侧使用账号/密码登录，填入 Token 后，点击启动即可刷EGPA。"))
         self.add_vote_countLabel.setStatusTip(_translate("mainWindow", "发起投票数量，如不需要请改为0关闭自动发起投票"))
         self.add_vote_countLabel.setText(_translate("mainWindow", "发起投票数量"))
         self.add_vote_countSpinbox.setStatusTip(_translate("mainWindow", "发起投票数量，如不需要请改为0关闭自动发起投票"))
@@ -226,23 +220,13 @@ class Ui_mainWindow(object):
         self.tokenLabel.setStatusTip(_translate("mainWindow", "Token是易班账号密码验证的优秀替代方式，可用于访问易班服务，重新登录将重置Token"))
         self.tokenLabel.setText(_translate("mainWindow", "Token"))
         self.tokenLineedit.setStatusTip(_translate("mainWindow", "Token是易班账号密码验证的优秀替代方式，可用于访问易班服务，重新登录将重置Token"))
-        self.catLabel.setToolTip(_translate("mainWindow", "<html><head/><body><p>可以选择文本内容，使用了 https://hitokoto.cn/ 的服务</p><table border=\"0\"style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\"cellspacing=\"0\"cellpadding=\"0\"><td rowspan=\"9\"/><td colspan=\"4\"><p>提交不同的参数代表不同的类别，具体：</p></td></tr><tr><td><p>a</p></td><td colspan=\"2\"><p>Anime-动画</p></td><td/></tr><tr><td><p>b</p></td><td colspan=\"2\"><p>Comic–漫画</p></td><td/></tr><tr><td><p>c</p></td><td colspan=\"2\"><p>Game–游戏</p></td><td/></tr><tr><td><p>d</p></td><td colspan=\"2\"><p>Novel–小说</p></td><td/></tr><tr><td><p>e</p></td><td colspan=\"2\"><p>Myself–原创</p></td><td/></tr><tr><td><p>f</p></td><td colspan=\"2\"><p>Internet–来自网络</p></td><td/></tr><tr><td><p>g</p></td><td colspan=\"2\"><p>Other–其他</p></td><td/></tr><tr><td><p>其他不存在参数</p></td><td colspan=\"2\"><p>任意类型随机取得</p></td><td/></tr></table></body></html>"))
-        self.catLabel.setStatusTip(_translate("mainWindow", "可以选择文本内容，使用了 https://hitokoto.cn/ 的服务"))
-        self.catLabel.setText(_translate("mainWindow", "使用的文本内容"))
-        self.comboBox.setStatusTip(_translate("mainWindow", "可以选择文本内容，使用了 https://hitokoto.cn/ 的服务"))
-        self.comboBox.setCurrentText(_translate("mainWindow", "Anime - 动画"))
-        self.comboBox.setItemText(0, _translate("mainWindow", "Anime - 动画"))
-        self.comboBox.setItemText(1, _translate("mainWindow", "Comic – 漫画"))
-        self.comboBox.setItemText(2, _translate("mainWindow", "Game – 游戏"))
-        self.comboBox.setItemText(3, _translate("mainWindow", "Novel – 小说"))
-        self.comboBox.setItemText(4, _translate("mainWindow", "Myself – 原创"))
-        self.comboBox.setItemText(5, _translate("mainWindow", "Internet – 来自网络"))
-        self.comboBox.setItemText(6, _translate("mainWindow", "Other – 其他"))
-        self.comboBox.setItemText(7, _translate("mainWindow", "All - 随机"))
-        self.comboBox.setItemText(8, _translate("mainWindow", "自定义"))
+        self.urlLabel.setStatusTip(_translate("mainWindow", "填入文本内容生成的链接"))
+        self.urlLabel.setText(_translate("mainWindow", "文本生成链接"))
         self.waitLabel.setStatusTip(_translate("mainWindow", "每个操作之间的间隔，填入浮点数"))
-        self.waitLabel.setText(_translate("mainWindow", "等待时间"))
+        self.waitLabel.setText(_translate("mainWindow", "等待时间间隔"))
         self.doubleSpinBox.setStatusTip(_translate("mainWindow", "每个操作之间的间隔，填入浮点数"))
         self.loginButton.setText(_translate("mainWindow", "账号/密码登录"))
         self.lauchButton.setText(_translate("mainWindow", "启动"))
-
+        self.NotePad.setPlainText(_translate("mainWindow", "这里可以填写备忘录"))
+        self.urlLineedit.setStatusTip(_translate("mainWindow", "填入文本内容生成的链接"))
+        self.urlLineedit.setText(_translate("mainWindow", "https://v1.hitokoto.cn/?encode=text"))

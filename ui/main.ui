@@ -42,7 +42,8 @@
        <bool>true</bool>
       </property>
       <property name="plainText">
-       <string/>
+       <string>Made by Simon Shi
+在左侧使用账号/密码登录，填入 Token 后，点击启动即可刷EGPA。</string>
       </property>
       <property name="centerOnScroll">
        <bool>false</bool>
@@ -335,77 +336,19 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="catLabel">
+       <widget class="QLabel" name="urlLabel">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;可以选择文本内容，使用了 https://hitokoto.cn/ 的服务&lt;/p&gt;&lt;table border=&quot;0&quot;style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot;cellspacing=&quot;0&quot;cellpadding=&quot;0&quot;&gt;&lt;td rowspan=&quot;9&quot;/&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;p&gt;提交不同的参数代表不同的类别，具体：&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;a&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Anime-动画&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;b&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Comic–漫画&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;c&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Game–游戏&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;d&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Novel–小说&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;e&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Myself–原创&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;f&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Internet–来自网络&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;g&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;Other–其他&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;其他不存在参数&lt;/p&gt;&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;p&gt;任意类型随机取得&lt;/p&gt;&lt;/td&gt;&lt;td/&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string/>
         </property>
         <property name="statusTip">
-         <string>可以选择文本内容，使用了 https://hitokoto.cn/ 的服务</string>
+         <string>填入文本内容生成的链接</string>
         </property>
         <property name="whatsThis">
          <string/>
         </property>
         <property name="text">
-         <string>使用的文本内容</string>
+         <string>文本生成链接</string>
         </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="comboBox">
-        <property name="statusTip">
-         <string>可以选择文本内容，使用了 https://hitokoto.cn/ 的服务</string>
-        </property>
-        <property name="currentText">
-         <string>Anime - 动画</string>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>Anime - 动画</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Comic – 漫画</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Game – 游戏</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Novel – 小说</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Myself – 原创</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Internet – 来自网络</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Other – 其他</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>All - 随机</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>自定义</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="3" column="0">
@@ -417,7 +360,7 @@
          <string>每个操作之间的间隔，填入浮点数</string>
         </property>
         <property name="text">
-         <string>等待时间</string>
+         <string>等待时间间隔</string>
         </property>
        </widget>
       </item>
@@ -464,6 +407,19 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="plainText">
+         <string>这里可以填写备忘录</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="urlLineedit">
+        <property name="statusTip">
+         <string>填入文本内容生成的链接</string>
+        </property>
+        <property name="text">
+         <string>https://v1.hitokoto.cn/?encode=text</string>
         </property>
        </widget>
       </item>

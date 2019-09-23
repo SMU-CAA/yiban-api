@@ -2,11 +2,13 @@
 
 # Form implementation generated from reading ui file 'ui/login.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_LoginWindow(object):
     def setupUi(self, LoginWindow):
@@ -29,5 +31,4 @@ class Ui_LoginWindow(object):
     def retranslateUi(self, LoginWindow):
         _translate = QtCore.QCoreApplication.translate
         LoginWindow.setWindowTitle(_translate("LoginWindow", "登录易班"))
-
 from PyQt5 import QtWebEngineWidgets

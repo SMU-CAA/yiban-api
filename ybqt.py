@@ -16,7 +16,7 @@ from ybqtloginui import Ui_LoginWindow
 
 class MyThread(QtCore.QThread):
 
-    def __init__(self, token, captcha, add_vote_count, vote_control_count, vote_reply_count, add_topic_count, topic_control_count, topic_reply_count, vote, vote_up, vote_reply, topic_up, topic_reply, cat, waitime):
+    def __init__(self, token, captcha, add_vote_count, vote_control_count, vote_reply_count, add_topic_count, topic_control_count, topic_reply_count, vote, vote_up, vote_reply, topic_up, topic_reply, url, waitime):
         super(MyThread, self).__init__()
         self.token = dict(yiban_user_token=token)
         self.add_vote_count = add_vote_count
@@ -30,33 +30,16 @@ class MyThread(QtCore.QThread):
         self.vote_reply = vote_reply
         self.topic_up = topic_up
         self.topic_reply = topic_reply
-        self.cat = cat
+        self.url = url
         self.waitime = waitime
 
-    def getHitokoto(self):
-        cato = {
-            0: "a",
-            1: "b",
-            2: "c",
-            3: "d",
-            4: "e",
-            5: "f",
-            6: "g",
-            7: "",
-        }
-        Get_Hitokoto = r.get("https://v1.hitokoto.cn/",
-                             params={"c": cato.get(self.cat), "encode": "json"}, timeout=10)
-        Hitokoto = Get_Hitokoto.json()["hitokoto"]
-        From = Get_Hitokoto.json()["from"]
-        return Hitokoto + " --" + From
-
-    def getElse(self, url=None):
-        Get_Url = r.get(url, timeout=10)
+    def getURL(self):
+        Get_Url = r.get(self.url, timeout=10)
         return str(Get_Url.text)
 
     def wait(self):
         try:
-            self.getEPGA()
+            self.getEGPA()
         except:
             pass
         finally:
@@ -92,14 +75,14 @@ class MyThread(QtCore.QThread):
         finally:
             self.wait()
 
-    def getEPGA(self):
+    def getEGPA(self):
         try:
-            Get_EPGA = r.get(yblogin.BASEURL + "newgroup/indexPub/group_id/" +
+            Get_EGPA = r.get(yblogin.BASEURL + "newgroup/indexPub/group_id/" +
                              self.group_id + "/puid/" + self.puid, headers=yblogin.header, cookies=self.token, timeout=10)
-            EPGA = re.search(r"EGPA：[0-9\.]*", Get_EPGA.text)
-            self.epgasig.emit(EPGA.group())
+            EGPA = re.search(r"EGPA：[0-9\.]*", Get_EGPA.text)
+            self.egpasig.emit(EGPA.group())
         except:
-            self.epgasig.emit("无法连接服务器")
+            self.egpasig.emit("无法连接服务器")
 
     def runVote(self):
         try:
@@ -109,7 +92,7 @@ class MyThread(QtCore.QThread):
             self.prog = 0
         for i in range(0, int(self.add_vote_count)):
             try:
-                text = self.getHitokoto()
+                text = self.getURL()
                 response = ybvote.vote(
                     self.token,
                     self.puid,
@@ -174,7 +157,7 @@ class MyThread(QtCore.QThread):
                 if self.vote_reply:
                     for i in range(0, int(self.vote_reply_count)):
                         try:
-                            response = votego.reply(self.getHitokoto())
+                            response = votego.reply(self.getURL())
                             self.sig.emit(self.fprint(
                                 "添加投票评论" + response, dlevel=1, num=i))
                         except:
@@ -205,8 +188,8 @@ class MyThread(QtCore.QThread):
                     self.group_id,
                     self.channel_id
                 ).add(
-                    self.getHitokoto(),
-                    self.getHitokoto()
+                    self.getURL(),
+                    self.getURL()
                 )
                 self.sig.emit(self.fprint("添加话题" + response, dlevel=1, num=i))
             except:
@@ -243,7 +226,7 @@ class MyThread(QtCore.QThread):
                     for i in range(0, int(self.topic_reply_count)):
                         try:
                             response = topicgo.reply(
-                                self.article_id, self.getHitokoto())
+                                self.article_id, self.getURL())
                             self.sig.emit(self.fprint(
                                 "添加话题评论" + response, dlevel=1, num=i))
                         except:
@@ -261,7 +244,7 @@ class MyThread(QtCore.QThread):
                 self.wait()
 
     sig = QtCore.pyqtSignal(str)
-    epgasig = QtCore.pyqtSignal(str)
+    egpasig = QtCore.pyqtSignal(str)
     prosig = QtCore.pyqtSignal(int)
     stopsig = QtCore.pyqtSignal()
 
@@ -289,8 +272,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         QtCore.QCoreApplication.setApplicationName("ybqt")
         self.settings = QtCore.QSettings(os.getcwd() + "/ybqt.ini", QtCore.QSettings.IniFormat)
         self.settings.setFallbacksEnabled(False)
-        self.plainTextEdit.appendPlainText("Made by Simon Shi")
-        self.plainTextEdit.appendPlainText("在左侧使用账号/密码登录，填入 Token 后，点击启动即可刷EGPA。")
         if os.path.exists(os.getcwd() + "/ybqt.ini"):
             self.resize(self.settings.value('size', QtCore.QSize(501, 501)))
             self.move(self.settings.value('pos', QtCore.QPoint(0, 0)))
@@ -311,7 +292,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
                 self.topic_upCheckbox.setChecked(False)
             if not self.settings.value("topic_reply", 0, type=int):
                 self.topic_replyCheckbox.setChecked(False)
-            self.comboBox.setCurrentIndex(self.settings.value("combo", 0, type=int))
+            self.urlLineedit.setText(self.settings.value("url", type=str))
             self.doubleSpinBox.setValue(self.settings.value("double", 0.0000, type=float))
             self.NotePad.setPlainText(self.settings.value("note", type=str))
         else:
@@ -335,7 +316,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.vote_replyCheckbox.setDisabled(True)
         self.topic_upCheckbox.setDisabled(True)
         self.topic_replyCheckbox.setDisabled(True)
-        self.comboBox.setDisabled(True)
+        self.urlLineedit.setDisabled(True)
         self.doubleSpinBox.setDisabled(True)
         self.progressBar.setValue(0)
         self.QsettingHook()
@@ -353,12 +334,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
             self.settings.value("vote_reply", 0, type=int),
             self.settings.value("topic_up", 0, type=int),
             self.settings.value("topic_reply", 0, type=int),
-            self.settings.value("combo", 0, type=int),
+            self.settings.value("url", type=str),
             self.settings.value("double", 0.0000, type=float)
         )
         self.mythread.sig.connect(self.PrintText)
         self.mythread.prosig.connect(self.Progress)
-        self.mythread.epgasig.connect(self.EpgaShowup)
+        self.mythread.egpasig.connect(self.EgpaShowup)
         self.mythread.stopsig.connect(self.StopThread)
         self.mythread.finished.connect(self.EnableButton)
         self.mythread.start()
@@ -383,7 +364,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.vote_replyCheckbox.setEnabled(True)
         self.topic_upCheckbox.setEnabled(True)
         self.topic_replyCheckbox.setEnabled(True)
-        self.comboBox.setEnabled(True)
+        self.urlLineedit.setEnabled(True)
         self.doubleSpinBox.setEnabled(True)
         self.lauchButton.released.disconnect()
         self.lauchButton.released.connect(self.DisableButton)
@@ -405,7 +386,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.settings.setValue("vote_reply", self.vote_replyCheckbox.checkState())
         self.settings.setValue("topic_up", self.topic_upCheckbox.checkState())
         self.settings.setValue("topic_reply", self.topic_replyCheckbox.checkState())
-        self.settings.setValue("combo", self.comboBox.currentIndex())
+        self.settings.setValue("url", self.urlLineedit.text())
         self.settings.setValue("double", self.doubleSpinBox.text())
         self.settings.setValue("note", self.NotePad.toPlainText())
         self.settings.sync()
@@ -414,7 +395,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         if self.mythread.isRunning():
             self.mythread.terminate()
 
-    def EpgaShowup(self, string):
+    def EgpaShowup(self, string):
         self.setWindowTitle("易班"+string)
 
     def Progress(self, integer):
