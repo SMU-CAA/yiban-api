@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding=utf-8
 import requests as r
-from yblogin import BASEURL
+from .yblogin import BASEURL
 
 
 class feed:

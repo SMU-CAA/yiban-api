@@ -5,3 +5,5 @@ __pycache__/
 *.ini
 build/
 dist/
+Pipfile
+Pipfile.lock

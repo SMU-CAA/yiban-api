@@ -7,9 +7,6 @@
 
 ![](misc/screenshoot.jpg)
 
-## yiban-api
-易班API的使用是为了更方便地使用Python进行网页接口的调用。
-
 ## License
 GPLv3
 

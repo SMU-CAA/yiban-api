@@ -12,7 +12,7 @@ import traceback
 import ybvote
 import ybtopic
 #import ybfeed
-from yblogin import BASEURL, getUserToken, getInfo
+from .yblogin import BASEURL, getUserToken, getInfo
 
 r = requests.Session()
 

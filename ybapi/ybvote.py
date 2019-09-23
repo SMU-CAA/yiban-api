@@ -3,7 +3,7 @@
 import re
 import time
 import requests as r
-from yblogin import BASEURL
+from .yblogin import BASEURL
 
 
 class vote:

@@ -9,9 +9,7 @@ import getopt
 import random
 import requests
 import traceback
-import ybvote
-import ybtopic
-from yblogin import BASEURL, getInfo
+from ybapi import ybvote, ybtopic, yblogin
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets, QtNetwork
 from ybqtmainui import Ui_mainWindow
 from ybqtloginui import Ui_LoginWindow
@@ -80,7 +78,7 @@ class MyThread(QtCore.QThread):
     def login(self):
         try:
             self.sig.emit(self.fprint("易班 Token: " + self.token['yiban_user_token'], dlevel=1))
-            self.info = getInfo(self.token)
+            self.info = yblogin.getInfo(self.token)
             self.group_id = self.info["group_id"]
             self.puid = self.info["puid"]
             self.channel_id = self.info["channel_id"]
@@ -96,8 +94,8 @@ class MyThread(QtCore.QThread):
 
     def getEPGA(self):
         try:
-            Get_EPGA = r.get(BASEURL + "newgroup/indexPub/group_id/" +
-                             self.group_id + "/puid/" + self.puid, cookies=self.token, timeout=10)
+            Get_EPGA = r.get(yblogin.BASEURL + "newgroup/indexPub/group_id/" +
+                             self.group_id + "/puid/" + self.puid, headers=yblogin.header, cookies=self.token, timeout=10)
             EPGA = re.search(r"EGPA：[0-9\.]*", Get_EPGA.text)
             self.epgasig.emit(EPGA.group())
         except:
@@ -435,7 +433,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         loginw.show()
 
 class LoginWindow(QtWidgets.QMainWindow, Ui_LoginWindow):
-    
+
     def __init__(self):
         super(LoginWindow, self).__init__()
         self.setupUi(self)

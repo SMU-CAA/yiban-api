@@ -45,7 +45,7 @@ def getUserToken(user, passwd, captcha=None):
         'keysTime': KeysTime,
         'is_rember': 1
     }
-    
+
     LoginURL = r.post(LOGIN_URL, headers=header, data=data, timeout=10)
     try:
         token = LoginURL.cookies['yiban_user_token']  # -> KeyError Exception
@@ -61,9 +61,14 @@ def getUserToken(user, passwd, captcha=None):
 
 def getInfo(token):
 
-    Get_Group_Info = requests.get(BASEURL+'my/group/type/public', cookies=token, timeout=10)
-    group_id = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(1)
-    puid = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(2)
+    try:
+        Get_Group_Info = requests.get(BASEURL+'my/group/type/public', cookies=token, timeout=10)
+        group_id = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(1)
+        puid = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(2)
+    except AttributeError:
+        Get_Group_Info = requests.get(BASEURL+'my/group/type/create', cookies=token, timeout=10)
+        group_id = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(1)
+        puid = re.search(r'href="/newgroup/indexPub/group_id/(\d+)/puid/(\d+)"', Get_Group_Info.text).group(2)
 
     payload = {
         'puid': puid,
