@@ -78,7 +78,7 @@ class MyThread(QtCore.QThread):
     def getEGPA(self):
         try:
             Get_EGPA = r.get(yblogin.BASEURL + "newgroup/indexPub/group_id/" +
-                             self.group_id + "/puid/" + self.puid, headers=yblogin.header, cookies=self.token, timeout=10)
+                             self.group_id + "/puid/" + self.puid, cookies=self.token, headers=yblogin.header, timeout=10)
             EGPA = re.search(r"EGPA：[0-9\.]*", Get_EGPA.text)
             self.egpasig.emit(EGPA.group())
         except:
@@ -108,7 +108,7 @@ class MyThread(QtCore.QThread):
                 self.sig.emit(self.fprint("添加投票时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
             finally:
                 self.pro = self.pro + self.prog
-                self.prosig.emit(self.pro)
+                self.prosig.emit(int(self.pro))
                 self.wait()
         voteget = []
         for i in range(0, int(self.vote_control_count)):
@@ -140,7 +140,7 @@ class MyThread(QtCore.QThread):
                             "参与投票时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                     finally:
                         self.pro = self.pro + self.prog
-                        self.prosig.emit(self.pro)
+                        self.prosig.emit(int(self.pro))
                         self.wait()
                 if self.vote_up:
                     try:
@@ -152,7 +152,7 @@ class MyThread(QtCore.QThread):
                             "点赞投票时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                     finally:
                         self.pro = self.pro + self.prog
-                        self.prosig.emit(self.pro)
+                        self.prosig.emit(int(self.pro))
                         self.wait()
                 if self.vote_reply:
                     for i in range(0, int(self.vote_reply_count)):
@@ -165,7 +165,7 @@ class MyThread(QtCore.QThread):
                                 "添加投票评论时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                         finally:
                             self.pro = self.pro + self.prog
-                            self.prosig.emit(self.pro)
+                            self.prosig.emit(int(self.pro))
                             self.wait()
             except IndexError:
                 self.sig.emit(self.fprint("投票互动数量数量超过投票总数", dlevel=2, num=i))
@@ -196,7 +196,7 @@ class MyThread(QtCore.QThread):
                 self.sig.emit(self.fprint("添加话题时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
             finally:
                 self.pro = self.pro + self.prog
-                self.prosig.emit(self.pro)
+                self.prosig.emit(int(self.pro))
                 self.wait()
         topicget = []
         for i in range(0, int(self.topic_control_count)):
@@ -220,7 +220,7 @@ class MyThread(QtCore.QThread):
                             "点赞话题时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                     finally:
                         self.pro = self.pro + self.prog
-                        self.prosig.emit(self.pro)
+                        self.prosig.emit(int(self.pro))
                         self.wait()
                 if self.topic_reply:
                     for i in range(0, int(self.topic_reply_count)):
@@ -234,7 +234,7 @@ class MyThread(QtCore.QThread):
                                 "添加话题评论时未获取到的错误" + traceback.format_exc(), dlevel=2, num=i))
                         finally:
                             self.pro = self.pro + self.prog
-                            self.prosig.emit(self.pro)
+                            self.prosig.emit(int(self.pro))
                             self.wait()
             except IndexError:
                 self.sig.emit(self.fprint("话题互动数量数量超过话题总数", dlevel=2, num=i))
