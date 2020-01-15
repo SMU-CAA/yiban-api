@@ -16,9 +16,9 @@ from ybqtloginui import Ui_LoginWindow
 
 class MyThread(QtCore.QThread):
 
-    def __init__(self, token, captcha, add_vote_count, vote_control_count, vote_reply_count, add_topic_count, topic_control_count, topic_reply_count, vote, vote_up, vote_reply, topic_up, topic_reply, url, waitime):
+    def __init__(self, token, clearance, captcha, add_vote_count, vote_control_count, vote_reply_count, add_topic_count, topic_control_count, topic_reply_count, vote, vote_up, vote_reply, topic_up, topic_reply, url, waitime):
         super(MyThread, self).__init__()
-        self.token = dict(yiban_user_token=token)
+        self.token = dict(yiban_user_token=token, _ydclearance=clearance)
         self.add_vote_count = add_vote_count
         self.vote_control_count = vote_control_count
         self.vote_reply_count = vote_reply_count
@@ -264,6 +264,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
+        self.clearance = dict()
         self.setupUi(self)
         self.lauchButton.released.connect(self.DisableButton)
         self.loginButton.released.connect(self.showLogin)
@@ -276,6 +277,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
             self.resize(self.settings.value('size', QtCore.QSize(501, 501)))
             self.move(self.settings.value('pos', QtCore.QPoint(0, 0)))
             self.tokenLineedit.setText(self.settings.value("token", type=str))
+            self.clearance = self.settings.value("clearance", type=str)
             self.add_vote_countSpinbox.setValue(self.settings.value("add_vote_count", 0, type=int))
             self.vote_control_countSpinbox.setValue(self.settings.value("vote_control_count", 0, type=int))
             self.vote_reply_countSpinbox.setValue(self.settings.value("vote_reply_count", 0, type=int))
@@ -322,6 +324,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.QsettingHook()
         self.mythread = MyThread(
             self.settings.value("token", type=str),
+            self.settings.value("clearance", type=str),
             self.settings.value("captcha", type=str),
             self.settings.value("add_vote_count", 0, type=int),
             self.settings.value("vote_control_count", 0, type=int),
@@ -375,6 +378,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.settings.setValue("pos", self.pos())
         self.settings.setValue("size", self.size())
         self.settings.setValue("token", self.tokenLineedit.text())
+        self.settings.setValue("clearance", self.clearance)
         self.settings.setValue("add_vote_count", self.add_vote_countSpinbox.text())
         self.settings.setValue("vote_control_count", self.vote_control_countSpinbox.text())
         self.settings.setValue("vote_reply_count", self.vote_reply_countSpinbox.text())
@@ -436,6 +440,7 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_LoginWindow):
         self.cookies.update(data)
         if 'yiban_user_token' in self.cookies:
             mainw.tokenLineedit.setText(self.cookies['yiban_user_token'])
+            mainw.clearance = self.cookies['_ydclearance']
             self.resetWebview()
             self.close()
 
