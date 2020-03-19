@@ -1,7 +1,7 @@
 name: Upload EXE
 on: push
 jobs:
-  deploy:
+  build:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
