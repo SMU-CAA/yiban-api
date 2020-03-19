@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/main.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -193,7 +193,7 @@ class Ui_mainWindow(object):
         mainWindow.setWindowTitle(_translate("mainWindow", "易班 EGPA"))
         self.plainTextEdit.setStatusTip(_translate("mainWindow", "程序输出日志，如出错请咨询开发者"))
         self.plainTextEdit.setPlainText(_translate("mainWindow", "Made by Simon Shi\n"
-"在左侧使用账号/密码登录，填入 Token 后，点击启动即可刷EGPA。"))
+"在左侧使用账号/密码登录，待程序自动填入 Cookies 后，点击启动即可刷EGPA。"))
         self.add_vote_countLabel.setStatusTip(_translate("mainWindow", "发起投票数量，如不需要请改为0关闭自动发起投票"))
         self.add_vote_countLabel.setText(_translate("mainWindow", "发起投票数量"))
         self.add_vote_countSpinbox.setStatusTip(_translate("mainWindow", "发起投票数量，如不需要请改为0关闭自动发起投票"))
@@ -217,9 +217,9 @@ class Ui_mainWindow(object):
         self.topic_reply_countSpinbox.setStatusTip(_translate("mainWindow", "回复话题次数，如不需要请改为0关闭回复话题"))
         self.topic_reply_countLabel.setStatusTip(_translate("mainWindow", "回复话题次数，如不需要请改为0关闭回复话题"))
         self.topic_reply_countLabel.setText(_translate("mainWindow", "回复话题次数"))
-        self.tokenLabel.setStatusTip(_translate("mainWindow", "Token是易班账号密码验证的优秀替代方式，可用于访问易班服务，重新登录将重置Token"))
-        self.tokenLabel.setText(_translate("mainWindow", "Token"))
-        self.tokenLineedit.setStatusTip(_translate("mainWindow", "Token是易班账号密码验证的优秀替代方式，可用于访问易班服务，重新登录将重置Token"))
+        self.tokenLabel.setStatusTip(_translate("mainWindow", "Cookies是易班账号密码验证的短期临时替代方式，重新登录将重置Cookies"))
+        self.tokenLabel.setText(_translate("mainWindow", "Cookies"))
+        self.tokenLineedit.setStatusTip(_translate("mainWindow", "Cookies是易班账号密码验证的短期临时替代方式，重新登录将重置Cookies"))
         self.urlLabel.setStatusTip(_translate("mainWindow", "填入文本内容生成的链接"))
         self.urlLabel.setText(_translate("mainWindow", "文本生成链接"))
         self.waitLabel.setStatusTip(_translate("mainWindow", "每个操作之间的间隔，填入浮点数"))

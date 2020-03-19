@@ -11,14 +11,14 @@ import requests
 import traceback
 from ybapi import ybvote, ybtopic, yblogin
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets, QtNetwork
-from ybqtmainui import Ui_mainWindow
-from ybqtloginui import Ui_LoginWindow
+from ui.mainui import Ui_mainWindow
+from ui.loginui import Ui_LoginWindow
 
 class MyThread(QtCore.QThread):
 
-    def __init__(self, token, clearance, captcha, add_vote_count, vote_control_count, vote_reply_count, add_topic_count, topic_control_count, topic_reply_count, vote, vote_up, vote_reply, topic_up, topic_reply, url, waitime):
+    def __init__(self, token, captcha, add_vote_count, vote_control_count, vote_reply_count, add_topic_count, topic_control_count, topic_reply_count, vote, vote_up, vote_reply, topic_up, topic_reply, url, waitime):
         super(MyThread, self).__init__()
-        self.token = dict(yiban_user_token=token, _ydclearance=clearance)
+        self.token = json.loads(token)
         self.add_vote_count = add_vote_count
         self.vote_control_count = vote_control_count
         self.vote_reply_count = vote_reply_count
@@ -60,7 +60,7 @@ class MyThread(QtCore.QThread):
 
     def login(self):
         try:
-            self.sig.emit(self.fprint("易班 Token: " + self.token['yiban_user_token'], dlevel=1))
+            self.sig.emit(self.fprint("易班 Cookies:\n" + self.token['yiban_user_token'], dlevel=1))
             self.info = yblogin.getInfo(self.token)
             self.group_id = self.info["group_id"]
             self.puid = self.info["puid"]
@@ -70,7 +70,7 @@ class MyThread(QtCore.QThread):
             self.sig.emit(self.fprint(self.nick + ": 登陆成功", dlevel=1))
             return 0
         except:
-            self.sig.emit(self.fprint("无法连接服务器或 Token 错误，请重新使用账号/密码登录。" + traceback.format_exc(), dlevel=3))
+            self.sig.emit(self.fprint("无法连接服务器或 Cookies 错误，请重新使用账号/密码登录。" + traceback.format_exc(), dlevel=3))
             return 2
         finally:
             self.wait()
@@ -264,7 +264,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.clearance = dict()
         self.setupUi(self)
         self.lauchButton.released.connect(self.DisableButton)
         self.loginButton.released.connect(self.showLogin)
@@ -277,7 +276,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
             self.resize(self.settings.value('size', QtCore.QSize(501, 501)))
             self.move(self.settings.value('pos', QtCore.QPoint(0, 0)))
             self.tokenLineedit.setText(self.settings.value("token", type=str))
-            self.clearance = self.settings.value("clearance", type=str)
             self.add_vote_countSpinbox.setValue(self.settings.value("add_vote_count", 0, type=int))
             self.vote_control_countSpinbox.setValue(self.settings.value("vote_control_count", 0, type=int))
             self.vote_reply_countSpinbox.setValue(self.settings.value("vote_reply_count", 0, type=int))
@@ -324,7 +322,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.QsettingHook()
         self.mythread = MyThread(
             self.settings.value("token", type=str),
-            self.settings.value("clearance", type=str),
             self.settings.value("captcha", type=str),
             self.settings.value("add_vote_count", 0, type=int),
             self.settings.value("vote_control_count", 0, type=int),
@@ -378,7 +375,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mainWindow):
         self.settings.setValue("pos", self.pos())
         self.settings.setValue("size", self.size())
         self.settings.setValue("token", self.tokenLineedit.text())
-        self.settings.setValue("clearance", self.clearance)
         self.settings.setValue("add_vote_count", self.add_vote_countSpinbox.text())
         self.settings.setValue("vote_control_count", self.vote_control_countSpinbox.text())
         self.settings.setValue("vote_reply_count", self.vote_reply_countSpinbox.text())
@@ -439,8 +435,7 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_LoginWindow):
         data = {bytearray(QtNetwork.QNetworkCookie(cookie).name()).decode(): bytearray(QtNetwork.QNetworkCookie(cookie).value()).decode()}
         self.cookies.update(data)
         if 'yiban_user_token' in self.cookies:
-            mainw.tokenLineedit.setText(self.cookies['yiban_user_token'])
-            mainw.clearance = self.cookies['_ydclearance']
+            mainw.tokenLineedit.setText(json.dumps(self.cookies))
             self.resetWebview()
             self.close()
 

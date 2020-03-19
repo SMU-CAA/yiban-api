@@ -43,7 +43,7 @@
       </property>
       <property name="plainText">
        <string>Made by Simon Shi
-在左侧使用账号/密码登录，填入 Token 后，点击启动即可刷EGPA。</string>
+在左侧使用账号/密码登录，待程序自动填入 Cookies 后，点击启动即可刷EGPA。</string>
       </property>
       <property name="centerOnScroll">
        <bool>false</bool>
@@ -315,20 +315,20 @@
          <string/>
         </property>
         <property name="statusTip">
-         <string>Token是易班账号密码验证的优秀替代方式，可用于访问易班服务，重新登录将重置Token</string>
+         <string>Cookies是易班账号密码验证的短期临时替代方式，重新登录将重置Cookies</string>
         </property>
         <property name="whatsThis">
          <string/>
         </property>
         <property name="text">
-         <string>Token</string>
+         <string>Cookies</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="tokenLineedit">
         <property name="statusTip">
-         <string>Token是易班账号密码验证的优秀替代方式，可用于访问易班服务，重新登录将重置Token</string>
+         <string>Cookies是易班账号密码验证的短期临时替代方式，重新登录将重置Cookies</string>
         </property>
         <property name="text">
          <string/>
